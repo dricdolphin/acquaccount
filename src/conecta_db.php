@@ -1,4 +1,12 @@
 <?php
+namespace acquaccount;
+use mysqli;
+use DateTime;
+use DatePeriod;
+use DateInterval;
+use DateTimeImmutable;
+use Exception;
+
 /*********************
  * Classe conecta_db
  * ----------------------
@@ -42,12 +50,12 @@ class conecta_db {
     }
 
     private function pega_um_valor($objeto, $coluna, $chave, $valor_chave) {
-        $tabela = get_class($objeto);
-        if (!property_exists($tabela, $coluna)) {
+        $tabela = substr(strrchr(get_class($objeto), '\\'), 1);
+        if (!property_exists($objeto, $coluna)) {
             throw new Exception("Query inválida! A coluna '{$coluna}' não existe na tabela {$tabela}");
         }
         
-        if (!property_exists($tabela, $chave)) {
+        if (!property_exists($objeto, $chave)) {
             throw new Exception("Query inválida! A coluna '{$chave}' não existe na tabela {$tabela}");
         }
         
@@ -61,8 +69,8 @@ class conecta_db {
     }
 
     private function pega_objeto($objeto, $chave, $valor_chave) {
-        $tabela = get_class($objeto);
-        if (!property_exists($tabela, $chave)) {
+        $tabela = substr(strrchr(get_class($objeto), '\\'), 1);
+        if (!property_exists($objeto, $chave)) {
             throw new Exception("Query inválida! A coluna '{$chave}' não existe na tabela {$tabela}");
         }
 
@@ -75,13 +83,13 @@ class conecta_db {
     }
     
     private function salva_objeto($objeto, $dados, $chave, $valor_chave='') {
-        $tabela = get_class($objeto);
+        $tabela = substr(strrchr(get_class($objeto), '\\'), 1);
         $colunas = "";
         $string_param = ""; 
         $array_param = [];
         foreach ($dados as $coluna => $valor) {
             if ($coluna == $chave) { continue; }
-            if (property_exists($tabela, $coluna)) {
+            if (property_exists($objeto, $coluna)) {
                 $colunas .= "$coluna=?, ";
                 $string_param .= "s";
                 if (is_array($valor)) {
@@ -119,8 +127,8 @@ class conecta_db {
     }
 
     private function deleta_objeto($objeto, $chave, $chave_valor) {
-        $tabela = get_class($objeto);
-        if (!property_exists($tabela, $chave)) {
+        $tabela = substr(strrchr(get_class($objeto), '\\'), 1);
+        if (!property_exists($objeto, $chave)) {
             return false;
         }
         
@@ -137,10 +145,10 @@ class conecta_db {
     }
 
     private function pega_chaves_objeto($objeto, $chaves_array, $ordem = [], $chave_where = '', $chave_valor = '') {
-        $tabela = get_class($objeto);
+        $tabela = substr(strrchr(get_class($objeto), '\\'), 1);
         $lista_chaves = "";
         foreach ($chaves_array as $chave => $valor) {
-            if (!property_exists($tabela, $valor)) {
+            if (!property_exists($objeto, $valor)) {
                 throw new Exception("Query inválida! A coluna '{$valor}' não existe na tabela {$tabela}");
             }
             $lista_chaves .= "{$valor},";
@@ -151,7 +159,7 @@ class conecta_db {
         if (isset($ordem)) {
             $order_by = "ORDER BY ";
             foreach ($ordem as $chave => $valor) {
-                if (property_exists($tabela, $valor)) {
+                if (property_exists($objeto, $valor)) {
                     if (!is_numeric($chave)) {
                         $order_by .= "{$chave}($valor), $valor, ";
                     } else {
@@ -170,7 +178,7 @@ class conecta_db {
         if ($chave_where == "") { 
             $stmt = $this->db->prepare("SELECT $lista_chaves FROM $tabela $order_by"); 
         } else {
-            if (!property_exists($tabela, $chave_where)) {
+            if (!property_exists($objeto, $chave_where)) {
                 throw new Exception("Query inválida! A coluna '{$chave_where}' não existe na tabela {$tabela}");
             }
             $stmt = $this->db->prepare("SELECT $lista_chaves FROM $tabela WHERE $chave_where=? $order_by");
@@ -204,11 +212,11 @@ class conecta_db {
     }
 
     function pega_qtd_objeto($objeto, $chave_where = '', $chave_valor = '') {
-        $tabela = get_class($objeto);
+        $tabela = substr(strrchr(get_class($objeto), '\\'), 1);
         if ($chave_where == '' ) {
             $stmt = $this->db->prepare("SELECT id FROM $tabela");
         } else {
-            if (!property_exists($tabela, $chave_where)) {
+            if (!property_exists($objeto, $chave_where)) {
                 throw new Exception("Query inválida! A coluna '{$chave_where}' não existe na tabela {$tabela}");
             }
             $stmt = $this->db->prepare("SELECT id FROM $tabela WHERE $chave_where=?");
@@ -608,7 +616,7 @@ class conecta_db {
 
     private function pega_consumos_objeto($user, $perfil, $id_objeto, $objeto) {
         $datas_temp_query = $this->query_ultimos_doze_meses();
-        $tabela = get_class($objeto);
+        $tabela = substr(strrchr(get_class($objeto), '\\'), 1);
         $coluna_consumo = "";
         if ($tabela == "condominio") {
             $coluna_consumo = "(CASE WHEN consumo_{$tabela}.consumo IS NULL THEN 0 ELSE consumo_{$tabela}.consumo END) AS consumo,";

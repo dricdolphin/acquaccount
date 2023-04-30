@@ -1,4 +1,14 @@
 <?php
+namespace acquaccount;
+use mysqli;
+use DateTime;
+use DatePeriod;
+use DateInterval;
+use DateTimeImmutable;
+use Exception;
+use Countable;
+use Iterator;
+
 /**
  *  Classe links_perfil
  *  --------------------

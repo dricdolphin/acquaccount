@@ -1,4 +1,12 @@
 <?php
+namespace acquaccount;
+use mysqli;
+use DateTime;
+use DatePeriod;
+use DateInterval;
+use DateTimeImmutable;
+use Exception;
+
 /**************
  * Classe processa_objeto
  * -----------------
@@ -21,9 +29,10 @@ class processa_objeto {
 
     function __construct($objeto, $dados) {
         global $conecta_db;
-
-        if (class_exists($objeto)) {
-            $objeto_carregado = new $objeto();
+        
+        $objeto_com_namespace = __NAMESPACE__ . '\\' . $objeto;
+        if (class_exists($objeto_com_namespace)) {
+            $objeto_carregado = new $objeto_com_namespace();
         } else {
             $this->resposta['erro'] = true;
             $this->resposta['mensagem_erro'] = "O objeto '{$objeto}' não existe!";

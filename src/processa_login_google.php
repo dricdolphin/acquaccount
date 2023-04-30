@@ -1,4 +1,12 @@
 <?php
+namespace acquaccount;
+use mysqli;
+use DateTime;
+use DatePeriod;
+use DateInterval;
+use DateTimeImmutable;
+use Exception;
+
 /*************************
  * Classe processa_login_google
  * ----------------------------
@@ -12,9 +20,7 @@ class processa_login_google {
     private $client;
     
     function __construct() {
-        require_once 'config.php';
-        require_once 'vendor/autoload.php';
-        $this->client = new Google_Client(['client_id' => GOOGLE_CLIENT_ID]);  // Specify the CLIENT_ID of the app that accesses the backend
+        $this->client = new \Google_Client(['client_id' => GOOGLE_CLIENT_ID]);  // Specify the CLIENT_ID of the app that accesses the backend
     }
 
     function valida_token($token) {

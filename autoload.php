@@ -1,5 +1,8 @@
 <?php
     spl_autoload_register(function ($class) {
-        include 'src/' . $class . '.php';
+        if (str_contains($class, "acquaccount\\")) {
+            $class = substr($class, 12);
+            include 'src/' . $class . '.php';
+        }
     });
 ?>

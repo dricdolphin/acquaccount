@@ -1,4 +1,12 @@
 <?php
+namespace acquaccount;
+use mysqli;
+use DateTime;
+use DatePeriod;
+use DateInterval;
+use DateTimeImmutable;
+use Exception;
+
 /************
  * Classe acquaccount
  * ----------------------
@@ -109,12 +117,13 @@ class acquaccount {
         $pagina_default = new pagina_default();
         $dashboard = new dashboard();
         
-        if (class_exists($dados_get['acao'])) {
-            $objeto = new $dados_get['acao'];
-          } else {
-            $this->html_body = "<h4>Erro! Ação inválida!</h4>";
-            return array('erro' => true, 'html_body' => $this->html_body);
-          }
+        $objeto_com_namespace = __NAMESPACE__ . '\\' .$dados_get['acao'];
+        if (class_exists($objeto_com_namespace)) {
+          $objeto = new $objeto_com_namespace();
+        } else {
+          $this->html_body = "<h4>Erro! Ação inválida!</h4>";
+          return array('erro' => true, 'html_body' => $this->html_body);
+        }
           
           $this->icone_dashboard = $objeto->pega_icone();
           if (isset($dados_get['id'])) {
@@ -158,7 +167,7 @@ class acquaccount {
         $id_objeto = 0;
         $id_unidade = 0;
         $id_condominio = 0;
-        if (get_class($consumo_objeto) == "consumo_unidade") {
+        if (substr(strrchr(get_class($consumo_objeto), '\\'), 1) == "consumo_unidade") {
             if (isset($dados_get['id_unidade'])) { 
               $id_objeto = $dados_get['id_unidade']; 
               $unidade = new unidade();
@@ -176,7 +185,7 @@ class acquaccount {
           if ($perfil->cadastrador()) {
             if (!$perfil->autorizado($user, $dados_get['acao'], $id_condominio, $id_unidade)) { $pagina_default->link_pagina_principal(); }
           } elseif (!($perfil->admin() || $perfil->cadastrador())) { 
-            if (get_class($consumo_objeto) == "consumo_unidade") {
+            if (substr(strrchr(get_class($consumo_objeto), '\\'), 1) == "consumo_unidade") {
               if (!$perfil->autorizado($user, $dados_get['acao'], $id_condominio, $id_unidade)) { $pagina_default->link_pagina_principal(); }
             } else { $pagina_default->link_pagina_principal(); }
           }

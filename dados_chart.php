@@ -1,4 +1,12 @@
 <?php
+namespace acquaccount;
+use mysqli;
+use DateTime;
+use DatePeriod;
+use DateInterval;
+use DateTimeImmutable;
+use Exception;
+
 /**************
  * Classe dados_chart
  * -----------------
@@ -24,7 +32,8 @@ class dados_chart {
     function pega_dados($user, $perfil, $dados_post) {
         global $conecta_db;
         
-        $objeto = new $dados_post['objeto']();
+        $objeto = __NAMESPACE__ . '\\' . $dados_post['objeto'];
+        $objeto = new $objeto();
         $rows_html = $objeto->pega_dados_chart($user, $perfil);
         $this->dados['dados_chart'] = "        
         {
@@ -63,7 +72,8 @@ class dados_chart {
    function pega_dados_usuario($user, $perfil, $dados_post) {
         global $conecta_db;
         
-        $objeto = new $dados_post['objeto']();
+        $objeto = __NAMESPACE__ . '\\' . $dados_post['objeto'];
+        $objeto = new $objeto();
         $rows_html = $objeto->pega_html_consumos_unidade($user, $perfil, $dados_post['id_unidade']);
         $this->dados['dados_chart'] = "        
         {
@@ -106,7 +116,8 @@ class dados_chart {
     function pega_dados_condominio($user, $perfil, $dados_post) {
         global $conecta_db;
         
-        $objeto = new $dados_post['objeto']();
+        $objeto = __NAMESPACE__ . '\\' . $dados_post['objeto'];
+        $objeto = new $objeto();
         $rows_html = $objeto->pega_html_consumos_condominio($user, $perfil, $dados_post['id_condominio']);
         $this->dados['dados_chart'] = "        
         {

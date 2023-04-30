@@ -1,4 +1,12 @@
 <?php
+namespace acquaccount;
+use mysqli;
+use DateTime;
+use DatePeriod;
+use DateInterval;
+use DateTimeImmutable;
+use Exception;
+
 /**************************
  * Classe dashboard
  * ------------------
@@ -17,7 +25,7 @@
         global $conecta_db;
         
         $html = "";
-        $classe_objeto = get_class($objeto);
+        $classe_objeto = substr(strrchr(get_class($objeto), '\\'), 1);
         foreach ($lista_objeto as $chave => $valor) {
             $numero_quarters++;
             $metodo_pega_objeto = "pega_{$classe_objeto}_por_id";
@@ -40,7 +48,7 @@
     private function dashboard_novo_objeto($objeto) {
         global $conecta_db;
 
-        $nome_objeto = get_class($objeto);
+        $nome_objeto = substr(strrchr(get_class($objeto), '\\'), 1);
         $nome_objeto_maiuscula  = ucfirst($objeto->classe_singular());
         $novo = $objeto->pega_adjetivo_novo();
  
@@ -92,8 +100,9 @@
 
     private function select_meses_dashboard($user, $perfil, $objeto, $dados_get) {
         $html = "";
-        $link = get_class($objeto);
-        $objeto = new $link();
+        $link = substr(strrchr(get_class($objeto), '\\'), 1);
+        $objeto = __NAMESPACE__ . '\\' . $link;
+        $objeto = new $objeto();
         $mes_ano = "";
         
         if (isset($dados_get['mes_ano'])) {
@@ -164,9 +173,9 @@
             $cor = $links_perfil->pega_cor($chave);
             $icone = $links_perfil->pega_icone($chave);
             $link = $links_perfil->pega_link($chave);
-            
+            $objeto = __NAMESPACE__ . '\\' . $link;
             if ($links_perfil->dashboard($chave)) {
-                $qtd = $conecta_db->pega_qtd_objeto(new $link);
+                $qtd = $conecta_db->pega_qtd_objeto(new $objeto);
                 $html .= $this->dashboard_quarter($nome, $qtd, $icone, $cor, $link);
                 if ($numero_quarters == 4) {
                     $html .= "<div class='w3-clear'></div>";
@@ -282,7 +291,7 @@
         global $conecta_db;
         
         $html = "";
-        $link = get_class($objeto);
+        $link = substr(strrchr(get_class($objeto), '\\'), 1);
         if ($perfil->admin() || ($perfil->cadastrador())) {
             $lista_objetos = $objeto->pega_todos_ids();
             
@@ -298,8 +307,9 @@
         global $conecta_db;
         
         $html = "";
-        $link = get_class($objeto);
-        $objeto = new $link();
+        $link = substr(strrchr(get_class($objeto), '\\'), 1);
+        $objeto = __NAMESPACE__ . '\\' . $link;
+        $objeto = new $objeto();
         if ($perfil->admin() || $perfil->cadastrador()) {
             $dados_select_meses = $this->select_meses_dashboard($user, $perfil, $objeto, $dados_get);
             $html = $dados_select_meses['html'];

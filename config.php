@@ -1,4 +1,11 @@
 <?php
+namespace acquaccount;
+use mysqli;
+use DateTime;
+use DatePeriod;
+use DateInterval;
+use DateTimeImmutable;
+use Exception;
 
 /*
  * Configurações básicas do sistema

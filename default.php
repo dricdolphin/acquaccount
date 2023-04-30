@@ -1,4 +1,12 @@
 <?php
+namespace acquaccount;
+use mysqli;
+use DateTime;
+use DatePeriod;
+use DateInterval;
+use DateTimeImmutable;
+use Exception;
+
 /*******************************
  * Acquaccount
  * ------------------------
@@ -13,6 +21,7 @@
 //Chama os arquivos principais do programa
 require_once 'config.php';
 require_once 'autoload.php';
+require_once 'vendor/autoload.php';
 
 $conecta_db = new conecta_db(); //Variável GLOBAL de conexão com o banco de dados
 $acquaccount = new acquaccount();
