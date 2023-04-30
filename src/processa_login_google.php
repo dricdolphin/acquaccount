@@ -13,7 +13,7 @@ class processa_login_google {
     
     function __construct() {
         require_once 'config.php';
-        require_once 'google_api_client/vendor/autoload.php';
+        require_once 'vendor/autoload.php';
         $this->client = new Google_Client(['client_id' => GOOGLE_CLIENT_ID]);  // Specify the CLIENT_ID of the app that accesses the backend
     }
 
