@@ -37,7 +37,7 @@ use Exception;
             $html .= $this->dashboard_quarter("{$objeto->pega_nome()}",$ascendentes,$icone, $cor,
             "{$classe_objeto}&id={$objeto->pega_id()}", $icone_deletar = true);
             if ($numero_quarters == 4) {
-                $html .= "<div class='w3-clear'></div>";
+                $html .= "<div class=\"w3-clear\"></div>";
                 $numero_quarters = 0;
             }
         }
@@ -178,7 +178,7 @@ use Exception;
                 $qtd = $conecta_db->pega_qtd_objeto(new $objeto);
                 $html .= $this->dashboard_quarter($nome, $qtd, $icone, $cor, $link);
                 if ($numero_quarters == 4) {
-                    $html .= "<div class='w3-clear'></div>";
+                    $html .= "<div class=\"w3-clear\"></div>";
                     $numero_quarters = 0;
                 }
             }
@@ -201,6 +201,56 @@ use Exception;
         <div name=\"div_graficos\" id=\"consumo_condominio\" class=\"w3-half\"></div>
         <div name=\"div_graficos\" id=\"consumo_unidade\" class=\"w3-half\"></div>";
 
+        return $html;
+    }
+
+    function dashboard_sindico($user, $perfil) {
+        global $conecta_db;
+       
+        $html = "<h5><b><i class=\"fa fa-dashboard\"></i> Dashboard do Síndico</b></h5>";
+        $numero_quarters = 0;
+        $interval = new DateTime("now");
+        $mes = $interval->format('m');
+        $ano = $interval->format('Y');
+        $condominio = new condominio();
+        $unidade = new unidade();
+        $consumo_unidade = new consumo_unidade();
+
+        $lista_condominios = $perfil->pega_ids_condominio();
+        if ($perfil->admin()) {
+            $lista_condominios = $condominio->pega_todos_ids();
+        } 
+        
+        foreach ($lista_condominios as $chave => $valor) {
+            $id_condominio = $valor;
+            if (isset($valor['id'])) {
+                $id_condominio = $valor['id'];
+            }
+            $condominio->pega_condominio_por_id($id_condominio);
+            $nome_condominio = $condominio->pega_nome();
+            $qtd_unidades_condominio = $condominio->pega_numero_unidades_condominio($id_condominio);
+            
+            $qtd_status_chart = $consumo_unidade->pega_dados_chart_unidades($user, $perfil, $id_condominio);
+            foreach ($qtd_status_chart as $chave => $valor) {
+                $qtd_status[$valor['nome']] = $valor['valor'];
+            }
+
+            $html .= "
+            <div class=\"w3-container\">
+            <div><h5><b>{$nome_condominio}</b></h4></div>
+            <div>{$mes}/{$ano}</div>
+            <div class=\"w3-clear\">&nbsp;</div>";
+            
+            $html .= $quarter_aguardando_leitura = $this->dashboard_quarter($nome = "Aguardando Leitura", 
+                $qtd_status['Aguardando Leitura'], $icone = "fa fa-droplet-slash",$cor = "w3-deep-orange");
+            $html .= $quarter_aguardando_validacao = $this->dashboard_quarter($nome = "Aguardando Validação", 
+                $qtd_status['Aguardando Validação'], $icone = "fa fa-hand-holding-droplet",$cor = "w3-khaki");
+            $html .= $quarter_validado = $this->dashboard_quarter($nome = "Consumo Validado", 
+                $qtd_status['Consumo Validado'], $icone = "fa fa-faucet-drip",$cor = "w3-green");
+            $html .= "<div class=\"w3-clear\">&nbsp;</div>
+            </div>";
+        }
+        
         return $html;
     }
 
@@ -238,17 +288,17 @@ use Exception;
                 $html_links_meses_consumo .= "<div class=\"w3-tag w3-padding w3-indigo w3-margin\">
                     <div class=\"w3-left\"><i class=\"fas fa-file-invoice-dollar w3-xlarge\"> &nbsp; </i></div><br>
                     <div><p>{$calculo_consumo} m³</p>
-                    <a href=\"?acao=consumo_unidade&id_unidade={$id_unidade}&mes={$valor['mes']}&ano={$valor['ano']}\">{$valor['mes']}/{$valor['ano']}</a></div>
+                    <a href=\"?acao=consumo_unidade&id_unidade={$id_unidade}&mes={$valor['mes']}&ano={$valor['ano']}&id={$valor['id']}\">{$valor['mes']}/{$valor['ano']}</a></div>
                 </div>";
             }
             
-            $html .= "<div class=\"w3-content\">
+            $html .= "<div class=\w3-container\">
             <h3>{$nome_unidade}</h3><br>
             {$html_links_meses_consumo}
             </div>
             <div class=\"w3-clear\"> &nbsp; </div>";
             
-            $html .= "<div name=\"div_graficos\" id=\"consumo_unidade_{$id_unidade}\" class=\"w3-content\"></div>";
+            $html .= "<div name=\"div_graficos\" id=\"consumo_unidade_{$id_unidade}\" class=\"w3-container\"></div>";
             $html .= "<div class=\"w3-clear\"> &nbsp; </div>";
         }
 
@@ -278,7 +328,7 @@ use Exception;
                 $user_edita->pega_cor(),"user&id={$user_edita->pega_id()}", $deleta_user);
                 
                 if ($numero_quarters == 4) {
-                    $html .= "<div class='w3-clear'></div>";
+                    $html .= "<div class=\"w3-clear\"></div>";
                     $numero_quarters = 0;
                 }
             }
@@ -343,7 +393,7 @@ use Exception;
                 $html .= $this->dashboard_quarter($nome,$ascendentes, $icone, $cor,
                 "{$link}&{$id_objeto_consumo}={$valor_id_objeto_consumo}{$dados_select_meses['mes_ano']}{$id_objeto}", $icone_deletar = false);
                 if ($numero_quarters == 4) {
-                    $html .= "<div class='w3-clear'></div>";
+                    $html .= "<div class=\"w3-clear\"></div>";
                     $numero_quarters = 0;
                 }
             }
@@ -397,12 +447,12 @@ use Exception;
             }
             
             $html_tabela_consumo_unidades = $this->html_tabela_consumo_unidades($dados_consumo_unidades, $taxa_minima, $taxa_m3_completa, $id_condominio);
-            $html .= "<div class=\"w3-content\">
+            $html .= "<div class=\"w3-container\">
             <h3>{$nome_condominio}</h3></div>";
             
-            $html .= "<div name=\"div_graficos\" id=\"consumo_condominio_{$id_condominio}\" class=\"w3-content\"></div>
+            $html .= "<div name=\"div_graficos\" id=\"consumo_condominio_{$id_condominio}\" class=\"w3-container\"></div>
             <div class=\"w3-clear\"> &nbsp; </div>
-            <div class=\"w3-content w3-center\">
+            <div class=\"w3-container w3-center\">
                 <div class=\"w3-tag w3-indigo\">Unidades: {$numero_unidades}</div>
                 <div class=\"w3-tag w3-blue\">Consumo das Unidades: {$consumo_condominio_m3}m³</div><br>
                 <div class=\"w3-tag w3-green\">Taxa Mínima: R$ {$taxa_minima} </div>

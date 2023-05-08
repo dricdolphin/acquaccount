@@ -226,10 +226,14 @@ class consumo_unidade {
       return $datas_option;
    }
 
-   function pega_dados_chart($user, $perfil, $id_condominio = 0) {
+   function pega_dados_chart_unidades($user, $perfil, $id_condominio = 0) {
       global $conecta_db;
 
-      $dados_chart = $conecta_db->pega_dados_chart_unidades($this, $user, $perfil, $id_condominio);
+      return $conecta_db->pega_dados_chart_unidades($this, $user, $perfil, $id_condominio);
+   }
+   
+   function pega_dados_chart($user, $perfil, $id_condominio = 0) {
+      $dados_chart = $this->pega_dados_chart_unidades($user, $perfil, $id_condominio);
 
       $html = "";
       foreach ($dados_chart as $chave => $valor) {

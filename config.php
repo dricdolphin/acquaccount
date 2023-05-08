@@ -24,6 +24,10 @@ define('DB_NAME', 'DB_NAME');
 
 //Configuração do API do Google Client
 define('GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_ID');
-define('GOOGLE_CLIENT_SECRET', 'GOOGLE_CLIENT_SECRED');
+define('GOOGLE_CLIENT_SECRET', 'GOOGLE_CLIENT_SECRET');
 define('GOOGLE_REDIRECT_URL', 'GOOGLE_REDIRECT_URL');
+
+//Configurações diversas
+define('EMAIL_ADMIN', 'admin@acquaccount.com.br');
+define('SITE', 'https://acquaccount.com.br');
 ?>

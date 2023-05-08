@@ -48,7 +48,9 @@ class acquaccount {
             $dados_session['token'] = $dados_post['credential'];
             if (!$user->pega_user_por_email($dados_cliente['email'])) {
               $this->html_body = "<meta http-equiv=\"refresh\" content=\"10\">
-              <h4>Seu email não está cadastrado no sistema! Por favor, entre em contato com o Administrador!</h4>\n";
+              <h4>Parece que você ainda não está cadastrado no sistema!<br>
+              Caso seja proprietário de alguma unidade sob gestão do sistema Acquaccount,<br>
+              por favor entre em contato com seu Síndico ou com o Administrador do sistema!</h4>\n";
               $cliente->revokeToken($dados_session['token']);
         
               unset($dados_session['token']);
@@ -158,7 +160,10 @@ class acquaccount {
         if (isset($dados_get['mes_ano'])) {
           $mes = substr($dados_get['mes_ano'],0,2);
           $ano = substr($dados_get['mes_ano'],2);
-        } else { 
+        } elseif (isset($dados_get['mes']) && isset($dados_get['ano'])) {
+          $mes = $dados_get['mes'];
+          $ano = $dados_get['ano'];
+        }else { 
           $interval = new DateTime("now");
           $mes = $interval->format('m');
           $ano = $interval->format('Y');
@@ -194,7 +199,7 @@ class acquaccount {
           $id_consumo_objeto = $consumo_objeto->$verifica_consumo_objeto($id_objeto, $mes, $ano);
           if (!isset($dados_get['id'])) {
             $pega_consumo_objeto = "pega_{$dados_get['acao']}_por_id";
-            $consumo_objeto->$pega_consumo_objeto ($id_consumo_objeto);
+            $consumo_objeto->$pega_consumo_objeto($id_consumo_objeto);
           } else {
             if ($dados_get['id'] != $id_consumo_objeto) {
               if ($id_consumo_objeto == null) {

@@ -13,9 +13,10 @@ use Exception;
  * 
  * Sistema de Individualização de consumo de água em condomínios
  * 
- * @ver 1.0.0
+ * @version 1.0.1
+ * @date 2023-05-07
  * 
- * Criado por Adriano Di Piero Filho
+ * @author Adriano Di Piero Filho <adrianodipiero@gmail.com>
  */
 
 //Chama os arquivos principais do programa
@@ -67,17 +68,32 @@ if ($user->logado()) {
     unset($_SESSION['objeto']);
     unset($_SESSION['id']);
     if ($html_body == "") {
-      if ($perfil->admin() || $perfil->sindico()) {
+      if ($perfil->admin()) {
         $html_body = $dashboard->dashboard_admin($user, $perfil);
         $titulo_dashboard = "Dashboard do Admin";
-        if ($perfil->sindico()) {
-          $titulo_dashboard = "Dashboard do Síndico";
-        }
         $icone_dashboard = "fa fa-dashboard";
+        if ($perfil->sindico()) {
+          $html_body .= "<div class=\"w3-clear\">&nbsp;</div>";
+          $html_body .= $dashboard->dashboard_sindico($user, $perfil);
+        }
       } elseif ($perfil->cadastrador()) {
         $html_body = $dashboard->dashboard_cadastrador($user, $perfil);
         $titulo_dashboard = "Dashboard do Leiturista";
-        $icone_dashboard = "fa fa-dashboard";     
+        $icone_dashboard = "fa fa-dashboard";
+        if ($perfil->sindico()) {
+          $html_body .= "<div class=\"w3-clear\">&nbsp;</div>";
+          $html_body .= $dashboard->dashboard_sindico($user, $perfil);
+        }
+      } elseif ($perfil->sindico()) {
+        $titulo_dashboard = "";
+        $icone_dashboard = "";
+        if (count($perfil->pega_ids_links_autorizado()) > 0) {
+          $html_body = $dashboard->dashboard_admin($user, $perfil);
+          $titulo_dashboard = "Dashboard de Gestão";
+          $icone_dashboard = "fa fa-dashboard";
+        }
+        $html_body .= "<div class=\"w3-clear\">&nbsp;</div>";
+        $html_body .= $dashboard->dashboard_sindico($user, $perfil);
       } else {
         $html_body = $dashboard->dashboard_usuario($user, $perfil);;
         $titulo_dashboard = "Dashboard do Usuário";
