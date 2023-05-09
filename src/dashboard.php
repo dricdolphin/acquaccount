@@ -478,12 +478,7 @@ use Exception;
         <div class=\"hidden w3-green\" style=\"text-align: center; position: sticky; top: 72px;\" id=\"caixa_dados_salvos\">&nbsp;</div>
         <div class=\"w3-row-padding w3-margin-bottom\">
             {$html_dashboard}
-        </div>
-        <!-- Footer -->
-        <footer class=\"w3-container w3-padding-16 w3-light-grey\">
-          <h4></h4>
-          <p>&copy;Acquaccount - {$ano} &nbsp; | &nbsp; Powered by <a href=\"https://www.w3schools.com/w3css/default.asp\" target=\"_blank\">w3.css</a></p>
-        </footer>";
+        </div>";
 
         return $html;
     }

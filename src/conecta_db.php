@@ -317,7 +317,7 @@ class conecta_db {
     function pega_todos_ids_unidade($objeto, $id_condominio = 0) {
         $ordem = array("id_condominio","id_bloco","LENGTH" => "numero");
         if ($id_condominio == 0) { return $this->pega_ids_objeto($objeto, $ordem); }
-        return $this->pega_ids_objeto($objeto, $ordem, "id_condominio", $id_condominio);
+        return $this->pega_ids_objeto($objeto, $ordem, $chave_where = "id_condominio", $id_condominio);
     }
 
     function pega_todos_consumo_unidade_ids($user, $perfil, $objeto, $id_unidade) {
@@ -521,6 +521,11 @@ class conecta_db {
         $ano = $interval->format('Y');
 
         $limite_perfil = "";
+        $limite_id_condominio = "";
+        if ($id_condominio != 0) {
+            $limite_id_condominio = " AND dados_unidades.uidcon={$id_condominio}";
+        }
+
         if (!$perfil->admin()) {
             $ids_condominio_autorizados = implode(",",$perfil->pega_ids_condominio());
             if ($ids_condominio_autorizados == "") { $ids_condominio_autorizados = "''"; }
@@ -538,6 +543,7 @@ class conecta_db {
         AND consumo_unidade.mes=? AND consumo_unidade.ano=?) AS dados_unidades
         WHERE dados_unidades.cuid IS NULL
         {$limite_perfil}
+        {$limite_id_condominio}
         
         UNION
         SELECT 'Aguardando Validação' AS nome, COUNT(dados_unidades.uid) AS valor, dados_unidades.uidcon AS id_condominio
@@ -550,6 +556,7 @@ class conecta_db {
         AND consumo_unidade.mes=? AND consumo_unidade.ano=?) AS dados_unidades
         WHERE dados_unidades.cuval = 0
         {$limite_perfil}
+        {$limite_id_condominio}
         
         UNION
         SELECT 'Consumo Validado' AS nome, COUNT(dados_unidades.uid) AS valor, dados_unidades.uidcon AS id_condominio
@@ -562,6 +569,7 @@ class conecta_db {
         AND consumo_unidade.mes=? AND consumo_unidade.ano=?) AS dados_unidades
         WHERE dados_unidades.cuval = 1
         {$limite_perfil}
+        {$limite_id_condominio}
         ) AS unidade_por_mes
         ");
 

@@ -404,11 +404,11 @@ function altera_endereco(json) {
     let estado = document.getElementById("estado");
 
     if (objeto_existe(endereco)) { 
-        endereco.value = json.logradouro; 
+        if (json.logradouro != "") { endereco.value = json.logradouro;  }
         if (!flag_foi_alterado.includes(endereco)) { flag_foi_alterado.push(endereco); } 
     }
     if (objeto_existe(bairro)) { 
-        bairro.value = json.bairro; 
+        if (json.bairro != "") { bairro.value = json.bairro;  }
         if (!flag_foi_alterado.includes(bairro)) { flag_foi_alterado.push(bairro); } 
     }
     if (objeto_existe(cidade)) { 

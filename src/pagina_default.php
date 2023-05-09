@@ -48,6 +48,11 @@ class pagina_default {
       {$html_body}
       </div>
       </body>
+      <!-- Footer -->
+      <footer class=\"w3-container w3-padding-16 w3-light-grey\">
+        <div class=\"w3-center\"><p>Acquaccount&copy; - {$ano} &nbsp; | &nbsp; Estilos por <a href=\"https://www.w3schools.com/w3css/default.asp\" target=\"_blank\">w3.css</a></p>
+        <p><a href='#' id=\"politica_privacidade\">Política de Privacidade</a> | <a href='#' id=\"termos_de_uso\">Termos de Uso</a> | <a href='?acao=contato' id=\"contato\">Contato</a></p></div>
+      </footer>
     </html>";
 
     return $html;

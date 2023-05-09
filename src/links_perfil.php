@@ -25,6 +25,7 @@ use Iterator;
     private $icone = [];
     private $link = [];
     private $dashboard = [];
+    private $publico = [];
     private $position;
     private $total_links;
 
@@ -37,6 +38,7 @@ use Iterator;
         $this->icone[] = "fa fa-users";
         $this->link[] = "user";
         $this->dashboard[] = true;
+        $this->publico[] = false;
  
         /** LINK 1 */
         $this->nome[] = "Perfis";
@@ -44,20 +46,23 @@ use Iterator;
         $this->icone[] = "fa fa-id-card";
         $this->link[] = "perfil";
         $this->dashboard[] = true;
+        $this->publico[] = false;
 
         /** LINK 2 */
         $this->nome[] = "Condomínios";
         $this->cor[] = "w3-blue";
         $this->icone[] = "fa fa-building";
         $this->link[] = "condominio";
-        $this->dashboard[] = true;    
+        $this->dashboard[] = true;
+        $this->publico[] = false;  
         
         /** LINK 3 */
         $this->nome[] = "Blocos";
         $this->cor[] = "w3-blue";
         $this->icone[] = "far fa-building";
         $this->link[] = "bloco";
-        $this->dashboard[] = true;         
+        $this->dashboard[] = true;
+        $this->publico[] = false;         
 
         /** LINK 4 */
         $this->nome[] = "Consumo do Condomínio";
@@ -65,6 +70,7 @@ use Iterator;
         $this->icone[] = "fa fa-money-bill-wave";
         $this->link[] = "consumo_condominio";
         $this->dashboard[] = false;
+        $this->publico[] = false;
 
         /** LINK 5 */
         $this->nome[] = "Unidades";
@@ -72,6 +78,7 @@ use Iterator;
         $this->icone[] = "fa fa-building-user";
         $this->link[] = "unidade";
         $this->dashboard[] = true;
+        $this->publico[] = false;
 
         /** LINK 6 */
         $this->nome[] = "Consumo das Unidades";
@@ -79,13 +86,31 @@ use Iterator;
         $this->icone[] = "fa fa-faucet-drip";
         $this->link[] = "consumo_unidade";
         $this->dashboard[] = false;
+        $this->publico[] = false;
 
          /** LINK 7 */
          $this->nome[] = "Relatórios";
          $this->cor[] = "w3-deep-orange";
          $this->icone[] = "fa fa-file-invoice";
          $this->link[] = "relatorios";
-         $this->dashboard[] = false;       
+         $this->dashboard[] = false;
+         $this->publico[] = false;      
+         
+         /** LINK 8 */
+         $this->nome[] = "Ajuda";
+         $this->cor[] = "w3-green";
+         $this->icone[] = "far fa-circle-question";
+         $this->link[] = "ajuda";
+         $this->dashboard[] = false;
+         $this->publico[] = true;  
+         
+         /** LINK 9 */
+         $this->nome[] = "Contato";
+         $this->cor[] = "w3-green";
+         $this->icone[] = "fa fa-envelope-open";
+         $this->link[] = "contato";
+         $this->dashboard[] = false;
+         $this->publico[] = true;           
 
         $this->total_links = count($this->nome);
     }
