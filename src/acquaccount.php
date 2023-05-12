@@ -50,7 +50,7 @@ class acquaccount {
               $this->html_body = "<meta http-equiv=\"refresh\" content=\"10\">
               <h4>Parece que você ainda não está cadastrado no sistema!<br>
               Caso seja proprietário de alguma unidade sob gestão do sistema Acquaccount,<br>
-              por favor entre em contato com seu Síndico ou com o Administrador do sistema!</h4>\n";
+              por favor entre em contato com seu Síndico ou com o Administrador do Sistema!</h4>\n";
               $cliente->revokeToken($dados_session['token']);
         
               unset($dados_session['token']);
@@ -264,7 +264,22 @@ class acquaccount {
       'icone_dashboard' => $this->icone_dashboard, 
       'html_body' => $this->html_body,
       'link_voltar' => $this->link_voltar);
+    }
 
+    function processa_contato($user, $perfil, $dados_get) {
+      $contato = new contato();
+      $pagina_default = new pagina_default();
+      $dashboard = new dashboard();
+      
+      $this->titulo_dashboard = $contato->classe_singular();
+      $this->icone_dashboard = $contato->pega_icone();
+      $this->link_voltar = $pagina_default->link_voltar();
+      $this->html_body = $contato->exibe_html($user, $perfil);
+      
+      return array('titulo_dashboard' => $this->titulo_dashboard, 
+      'icone_dashboard' => $this->icone_dashboard, 
+      'html_body' => $this->html_body,
+      'link_voltar' => $this->link_voltar);     
     }
 }
 ?>

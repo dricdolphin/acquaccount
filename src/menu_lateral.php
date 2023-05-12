@@ -44,7 +44,7 @@ class menu_lateral {
           }
         } elseif ($perfil->cadastrador()) {
           for ($index = 0; $index < count($links_perfil); $index++) {
-            if (!$links_perfil->dashboard($index) || $perfil->link_autorizado($links_perfil->pega_link($index))) {
+            if (!$links_perfil->pega_dashboard($index) || $perfil->link_autorizado($links_perfil->pega_link($index))) {
               $ids_links_autorizados[] = $index;
             }  
           }
@@ -57,6 +57,12 @@ class menu_lateral {
           $html_links_perfil .= $valor."\n";
         }
 
+        $links_dashboard = "";
+        if ($perfil->admin() || $perfil->cadastrador() || $perfil->sindico()) {
+          $links_dashboard = "<a href=\"/\" class=\"w3-bar-item w3-button\" title=\"Dashboard\"><i class=\"fa fa-dashboard\"></i></a>";
+        }
+        $links_dashboard .= "<a href=\"?dashboard=user\" class=\"w3-bar-item w3-button\" title=\"Dashboard do Usuário\"><i class=\"fas fa-chart-column\"></i></a>";
+
         $html = "
         <!-- Sidebar/menu -->
   <nav class=\"w3-sidebar w3-collapse w3-white w3-animate-left menu_lateral\" id=\"mySidebar\"><br>
@@ -64,9 +70,9 @@ class menu_lateral {
     <div class=\"w3-col s4\">
       <img src=\"{$user->pega_imagem()}\" class=\"w3-circle w3-margin-right\" style=\"width:46px\">
     </div>
-    <div class=\"w3-col s8 w3-bar\">
+    <div class=\"w3-col w3-bar\">
       <span>Olá, <strong>{$user->pega_nome()}</strong></span><br>
-      <a href=\"/\" class=\"w3-bar-item w3-button\" title=\"Dashboard\"><i class=\"fa fa-dashboard\"></i></a>
+      {$links_dashboard}
       <a href=\"?acao=user&id={$user->pega_id()}\" class=\"w3-bar-item w3-button\" title=\"Perfil\"><i class=\"fa fa-user\"></i></a>
       <a href=\"logout.php\" id=\"signout_button\" class=\"w3-bar-item w3-button g_id_signout\" title=\"Logout\"><i class=\"fa fa-arrow-right-from-bracket\"></i></a>
     </div>
@@ -78,7 +84,7 @@ class menu_lateral {
   </div>
   </nav>
   <!-- Overlay effect when opening sidebar on small screens -->
-  <div class=\"w3-overlay w3-hide-large w3-animate-opacity\" onclick=\"w3_close()\" style=\"cursor:pointer\" title=\"close side menu\" id=\"myOverlay\"></div>";
+  <div class=\"w3-overlay w3-hide-large w3-animate-opacity\" onclick=\"w3_close()\" style=\"cursor:pointer\" title=\"Fechar menu\" id=\"myOverlay\"></div>";
         return $html;
   }
 }

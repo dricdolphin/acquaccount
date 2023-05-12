@@ -1,3 +1,8 @@
+body.preload *{
+    animation-duration: 0s !important;
+    -webkit-animation-duration: 0s !important;
+    transition:background-color 0s, opacity 0s, color 0s, width 0s, height 0s, padding 0s, margin 0s !important;}
+
 .logo_acquaccount {
     background-image: url('img/logo_acquaccount_preto.png');
     background-repeat: no-repeat;
@@ -59,6 +64,18 @@
     margin: 2px;
     padding: 2px;
     max-width: 100%;
+}
+
+.div_privacidade {
+    display: none;
+    position: absolute;
+    width: 85%;
+    left: 7.5%;
+    top: 0px;
+    z-index: 3;
+    border: 2px solid;
+    border-radius: 0.5%;
+    margin-top:75px;
 }
 
 .button {
@@ -135,9 +152,27 @@ input[type=number] {
         width:300px; 
         top:115px;
     }
+
+    .div_privacidade {
+        margin-top:90px;
+    }
     
     .pagina_principal {
         margin-left:300px;
         margin-top:90px;
+    }
+}
+
+@media print {
+    div:not(.div_para_imprimir) {
+        display: none;
+    }
+
+    .div_para_imprimir {
+        visibility: visible !important;
+    }
+
+    .w3-top {
+        position: absolute;
     }
 }

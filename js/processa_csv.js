@@ -15,8 +15,6 @@ function htmlToCSV(tabela, filename) {
 
 function downloadCSVFile(csvContent, filename) {
 	let csv_file, download_link;
-	console.log(csvContent);
-	
 	csv_file = new Blob(["\ufeff",csvContent], {type: 'text/csv;charset=UTF-8'});
 	download_link = document.createElement("a");
 	download_link.download = filename;
@@ -24,4 +22,10 @@ function downloadCSVFile(csvContent, filename) {
 	download_link.style.display = "none";
 	document.body.appendChild(download_link);
 	download_link.click();
+}
+
+function imprime_pdf(div_tabela, filename) {
+	div_tabela.classList.toggle('div_para_imprimir');
+	window.print();
+	div_tabela.classList.toggle('div_para_imprimir');
 }

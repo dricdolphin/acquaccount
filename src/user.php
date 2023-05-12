@@ -166,6 +166,14 @@ class user {
         return $this->given_name;
     }
 
+    function pega_sobrenome() {
+        return $this->family_name;
+    }
+
+    function pega_email() {
+        return $this->email;
+    }
+
     function pega_nome_completo() {
         if (!$this->autenticado()) { return $this->email; }
         return $this->given_name . " " . $this->family_name;

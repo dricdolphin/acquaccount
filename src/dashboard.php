@@ -37,7 +37,7 @@ use Exception;
             $html .= $this->dashboard_quarter("{$objeto->pega_nome()}",$ascendentes,$icone, $cor,
             "{$classe_objeto}&id={$objeto->pega_id()}", $icone_deletar = true);
             if ($numero_quarters == 4) {
-                $html .= "<div class=\"w3-clear\"></div>";
+                $html .= "<div class=\"w3-clear div_para_imprimir\"></div>";
                 $numero_quarters = 0;
             }
         }
@@ -73,9 +73,9 @@ use Exception;
         }
         
         if (is_numeric($qtd)) {
-            $qtd = "<div class=\"w3-right\"><h3>{$qtd}</h3></div>";
+            $qtd = "<div class=\"w3-right div_para_imprimir\"><h3>{$qtd}</h3></div>";
         } else {
-            $qtd = "<div class=\"w3-clear no-margin-padding\"> &nbsp; </div><div class=\"w3-center no-margin-padding\"><p class=\"w3-small no-margin-padding\">{$qtd}</p></div>";
+            $qtd = "<div class=\"w3-clear no-margin-padding div_para_imprimir\"> &nbsp; </div><div class=\"w3-center no-margin-padding div_para_imprimir\"><p class=\"w3-small no-margin-padding\">{$qtd}</p></div>";
         }
         
         $titulo_icone = "";
@@ -85,12 +85,12 @@ use Exception;
         }
 
         $html = "          
-        <div class=\"w3-quarter w3-padding-small\">
-            <div class=\"w3-container {$w3_cor} w3-padding-16\">
+        <div class=\"w3-quarter w3-padding-small div_para_imprimir\">
+            <div class=\"w3-container {$w3_cor} w3-padding-16 div_para_imprimir\">
                 {$icone_deletar}
-                <div class=\"w3-left\"><i class=\"{$icone} w3-xxxlarge\" {$titulo_icone}> &nbsp; </i></div>
+                <div class=\"w3-left div_para_imprimir\"><i class=\"{$icone} w3-xxxlarge\" {$titulo_icone}> &nbsp; </i></div>
                 {$qtd}
-                <div class=\"w3-clear\"></div>
+                <div class=\"w3-clear div_para_imprimir\"></div>
                     <h4>{$link}</h4>
                 </div>
             </div>";
@@ -123,7 +123,7 @@ use Exception;
             $mes_ano = "";
         }
         
-        $html = "<div class=\"w3-clear w3-margin\">            
+        $html = "<div class=\"w3-clear w3-margin div_para_imprimir\">            
         <form id=\"form_dados\">
         <input type=\"hidden\" id=\"mes\" value=\"{$mes}\">
         <input type=\"hidden\" id=\"ano\" value=\"{$ano}\">
@@ -140,7 +140,8 @@ use Exception;
         $condominio = new condominio();
         $condominio->pega_condominio_por_id($id_condominio);
         $nome_condominio = $condominio->pega_nome();
-        $html = "<div class=\"w3-button w3-teal\"><i class=\"fas fa-file-csv w3-large\"> &nbsp; </i><a href=\"#\" id=\"link_tabela_consumo_condominio_{$id_condominio}\">Exportar Tabela</a></div>
+        $html = "<div class=\"w3-button w3-teal div_para_imprimir\"><i class=\"fas fa-file-csv w3-large\"> &nbsp; </i><a href=\"#\" id=\"link_tabela_consumo_condominio_{$id_condominio}\">Exportar Tabela</a></div>
+        <div class=\"w3-button w3-red div_para_imprimir\"><i class=\"fas fa-file-pdf w3-large\"> &nbsp; </i><a href=\"#\" id=\"link_imprimir_tabela_consumo_condominio_{$id_condominio}\">Imprimir Tabela</a></div>
         <table class=\"w3-table w3-white w3-striped w3-bordered\" id=\"tabela_consumo_condominio_{$id_condominio}\" data_nome_condominio=\"{$nome_condominio}\">
         <thead>
         <tr class=\"w3-indigo\"><th>Unidade</th><th>Consumo (m³)</th><th>Taxa Mínima (R$)</th><th>Valor Consumo m³ (R$)</th><th>Valor Total (R$)</th></tr>
@@ -174,7 +175,7 @@ use Exception;
             $icone = $links_perfil->pega_icone($chave);
             $link = $links_perfil->pega_link($chave);
             $objeto = __NAMESPACE__ . '\\' . $link;
-            if ($links_perfil->dashboard($chave)) {
+            if ($links_perfil->pega_dashboard($chave)) {
                 $qtd = $conecta_db->pega_qtd_objeto(new $objeto);
                 $html .= $this->dashboard_quarter($nome, $qtd, $icone, $cor, $link);
                 if ($numero_quarters == 4) {
@@ -207,7 +208,7 @@ use Exception;
     function dashboard_sindico($user, $perfil) {
         global $conecta_db;
        
-        $html = "<h5><b><i class=\"fa fa-dashboard\"></i> Dashboard do Síndico</b></h5>";
+        $html = "";
         $numero_quarters = 0;
         $interval = new DateTime("now");
         $mes = $interval->format('m');
@@ -236,10 +237,10 @@ use Exception;
             }
 
             $html .= "
-            <div class=\"w3-container\">
-            <div><h5><b>{$nome_condominio}</b></h4></div>
-            <div>{$mes}/{$ano}</div>
-            <div class=\"w3-clear\">&nbsp;</div>";
+            <div class=\"w3-container div_para_imprimir\">
+            <div class=\"div_para_imprimir\"><h5><b>{$nome_condominio}</b></h4></div>
+            <div class=\"div_para_imprimir\">{$mes}/{$ano}</div>
+            <div class=\"w3-clear div_para_imprimir\">&nbsp;</div>";
             
             $html .= $quarter_aguardando_leitura = $this->dashboard_quarter($nome = "Aguardando Leitura", 
                 $qtd_status['Aguardando Leitura'], $icone = "fa fa-droplet-slash",$cor = "w3-deep-orange");
@@ -247,7 +248,7 @@ use Exception;
                 $qtd_status['Aguardando Validação'], $icone = "fa fa-hand-holding-droplet",$cor = "w3-khaki");
             $html .= $quarter_validado = $this->dashboard_quarter($nome = "Consumo Validado", 
                 $qtd_status['Consumo Validado'], $icone = "fa fa-faucet-drip",$cor = "w3-green");
-            $html .= "<div class=\"w3-clear\">&nbsp;</div>
+            $html .= "<div class=\"w3-clear div_para_imprimir\">&nbsp;</div>
             </div>";
         }
         
@@ -286,20 +287,20 @@ use Exception;
                 $medicao[] = $valor['medicao'];
                 if ($valor['id'] == null || $valor['id'] == 0) { continue; }
                 $html_links_meses_consumo .= "<div class=\"w3-tag w3-padding w3-indigo w3-margin\">
-                    <div class=\"w3-left\"><i class=\"fas fa-file-invoice-dollar w3-xlarge\"> &nbsp; </i></div><br>
-                    <div><p>{$calculo_consumo} m³</p>
+                    <div class=\"w3-left div_para_imprimir\"><i class=\"fas fa-file-invoice-dollar w3-xlarge\"> &nbsp; </i></div><br>
+                    <div class=\"div_para_imprimir\"><p>{$calculo_consumo} m³</p>
                     <a href=\"?acao=consumo_unidade&id_unidade={$id_unidade}&mes={$valor['mes']}&ano={$valor['ano']}&id={$valor['id']}\">{$valor['mes']}/{$valor['ano']}</a></div>
                 </div>";
             }
             
-            $html .= "<div class=\w3-container\">
+            $html .= "<div class=\w3-container div_para_imprimir\">
             <h3>{$nome_unidade}</h3><br>
             {$html_links_meses_consumo}
             </div>
-            <div class=\"w3-clear\"> &nbsp; </div>";
+            <div class=\"w3-clear div_para_imprimir\"> &nbsp; </div>";
             
-            $html .= "<div name=\"div_graficos\" id=\"consumo_unidade_{$id_unidade}\" class=\"w3-container\"></div>";
-            $html .= "<div class=\"w3-clear\"> &nbsp; </div>";
+            $html .= "<div name=\"div_graficos div_para_imprimir\" id=\"consumo_unidade_{$id_unidade}\" class=\"w3-container\"></div>";
+            $html .= "<div class=\"w3-clear div_para_imprimir\"> &nbsp; </div>";
         }
 
         return $html;
@@ -328,7 +329,7 @@ use Exception;
                 $user_edita->pega_cor(),"user&id={$user_edita->pega_id()}", $deleta_user);
                 
                 if ($numero_quarters == 4) {
-                    $html .= "<div class=\"w3-clear\"></div>";
+                    $html .= "<div class=\"w3-clear div_para_imprimir\"></div>";
                     $numero_quarters = 0;
                 }
             }
@@ -393,7 +394,7 @@ use Exception;
                 $html .= $this->dashboard_quarter($nome,$ascendentes, $icone, $cor,
                 "{$link}&{$id_objeto_consumo}={$valor_id_objeto_consumo}{$dados_select_meses['mes_ano']}{$id_objeto}", $icone_deletar = false);
                 if ($numero_quarters == 4) {
-                    $html .= "<div class=\"w3-clear\"></div>";
+                    $html .= "<div class=\"w3-clear div_para_imprimir\"></div>";
                     $numero_quarters = 0;
                 }
             }
@@ -434,8 +435,26 @@ use Exception;
             
             //O Consumo do Condomínio em m³ é a soma dos consumo de TODAS as unidades
             //$consumo_condominio_m3 = (float) $consumo_condominio->pega_valor_m3();
-            $dados_consumo_unidades = $consumo_unidade->pega_consumos_unidades_condominio_mes_ano($user, $perfil, $id_condominio, 
+            $dados_consumo_unidades_mes_atual = $consumo_unidade->pega_consumos_unidades_condominio_mes_ano($user, $perfil, $id_condominio, 
                 $dados_select_meses['mes'], $dados_select_meses['ano']);
+           
+            $interval = new DateTime("{$dados_select_meses['ano']}-{$dados_select_meses['mes']}-01");
+            $interval = $interval->sub(new DateInterval('P1M'));
+            $mes_anterior = $interval->format('m');
+            $ano_anterior = $interval->format('Y');
+
+            $dados_consumo_unidades_mes_anterior = $consumo_unidade->pega_consumos_unidades_condominio_mes_ano($user, $perfil, $id_condominio, 
+                $mes_anterior, $ano_anterior);
+            
+            $dados_consumo_unidades = [];
+            foreach ($dados_consumo_unidades_mes_atual as $chave => $valor) {
+                $dados_consumo_unidades[$chave]['valor_m3'] = $valor['valor_m3'] - $dados_consumo_unidades_mes_anterior[$chave]['valor_m3'];
+                if ($dados_consumo_unidades[$chave]['valor_m3'] < 0) {
+                    $dados_consumo_unidades[$chave]['valor_m3'] = 0;
+                }
+                $dados_consumo_unidades[$chave]['numero_unidade'] = $valor['numero_unidade'];
+            }
+            
             $consumo_condominio_m3 = array_sum(array_column($dados_consumo_unidades, 'valor_m3'));
             $taxa_minima = number_format(round($consumo_minimo/$numero_unidades, 2), 2, ',', '');
             if ($consumo_condominio_m3 == 0) {
@@ -447,19 +466,22 @@ use Exception;
             }
             
             $html_tabela_consumo_unidades = $this->html_tabela_consumo_unidades($dados_consumo_unidades, $taxa_minima, $taxa_m3_completa, $id_condominio);
-            $html .= "<div class=\"w3-container\">
-            <h3>{$nome_condominio}</h3></div>";
+            $html .= "
+            <div class=\"w3-container\" id=\"div_tabela_consumo_condominio_{$id_condominio}\">
+                <h3>{$nome_condominio}</h3>";
             
-            $html .= "<div name=\"div_graficos\" id=\"consumo_condominio_{$id_condominio}\" class=\"w3-container\"></div>
-            <div class=\"w3-clear\"> &nbsp; </div>
-            <div class=\"w3-container w3-center\">
-                <div class=\"w3-tag w3-indigo\">Unidades: {$numero_unidades}</div>
-                <div class=\"w3-tag w3-blue\">Consumo das Unidades: {$consumo_condominio_m3}m³</div><br>
-                <div class=\"w3-tag w3-green\">Taxa Mínima: R$ {$taxa_minima} </div>
-                <div class=\"w3-tag w3-teal\">Taxa por m³: R$ {$taxa_m3}</div>
-            </div>
-            <div class=\"w3-clear\"> &nbsp; </div>
-            <div class=\"w3-container\">{$html_tabela_consumo_unidades}</div>";            
+            $html .= "
+                <div name=\"div_graficos div_para_imprimir\" id=\"consumo_condominio_{$id_condominio}\" class=\"w3-container div_para_imprimir\"></div>
+                <div class=\"w3-clear div_para_imprimir\"> &nbsp; </div>
+                <div class=\"w3-container w3-center div_para_imprimir\">
+                    <div class=\"w3-tag w3-indigo div_para_imprimir\">Unidades: {$numero_unidades}</div>
+                    <div class=\"w3-tag w3-blue div_para_imprimir\">Consumo das Unidades: {$consumo_condominio_m3}m³</div><br>
+                    <div class=\"w3-tag w3-green div_para_imprimir\">Taxa Mínima: R$ {$taxa_minima} </div>
+                    <div class=\"w3-tag w3-teal div_para_imprimir\">Taxa por m³: R$ {$taxa_m3}</div>
+                </div>
+                <div class=\"w3-clear div_para_imprimir\"> &nbsp; </div>
+                <div class=\"w3-container div_para_imprimir\">{$html_tabela_consumo_unidades}</div>
+            </div>";            
         }
         //$lista_consumo_condominio = $consumo_condominio->pega_consumo_condominio_por_mes($perfil, $dados_select_meses['mes'], $dados_select_meses['ano']);
 
@@ -467,19 +489,18 @@ use Exception;
     }
 
     function exibe_html($html_dashboard, $titulo, $icone, $link_voltar = '') {
-        $interval = new DateTime("now");
-        $ano = $interval->format('Y');
-        
         $html = "
         <!-- Header -->
         <header class=\"w3-container\" style=\"padding-top:22px\">
           <h5><b><i class=\"{$icone}\"></i> {$titulo}</b>{$link_voltar}</h5>
         </header>
         <div class=\"hidden w3-green\" style=\"text-align: center; position: sticky; top: 72px;\" id=\"caixa_dados_salvos\">&nbsp;</div>
-        <div class=\"w3-row-padding w3-margin-bottom\">
+        <div class=\"w3-row-padding w3-margin-bottom div_para_imprimir\">
             {$html_dashboard}
-        </div>";
-
+        </div>
+        ";
+        
+        $html .= "<div class=\"w3-clear div_para_imprimir\"></div>";
         return $html;
     }
  }

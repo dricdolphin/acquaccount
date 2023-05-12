@@ -13,8 +13,8 @@ use Exception;
  * 
  * Sistema de Individualização de consumo de água em condomínios
  * 
- * @version 1.0.3
- * @date 2023-05-09
+ * @version 1.0.4
+ * @date 2023-05-11
  * 
  * @author Adriano Di Piero Filho <adrianodipiero@gmail.com>
  */
@@ -36,6 +36,12 @@ $processa_login = $acquaccount->processa_login($_SESSION, $_POST, $user);
 $html_body = $processa_login['html_body'];
 $html_top_container = $processa_login['html_top_container'];
 $html_menu_lateral = "";
+$html_dashboard = "";
+
+$dashboard = new dashboard();
+$titulo_dashboard = "";
+$icone_dashboard = ""; 
+$link_voltar = "";
 
 if ($user->logado()) {
   if (!$user->data_login_valido()) {
@@ -45,63 +51,47 @@ if ($user->logado()) {
   $_SESSION['date_time_login'] = new DateTimeImmutable("now");
   
   $perfil = new perfil();
+  $links_perfil = new links_perfil();
   $perfil->pega_perfil_por_id($user->pega_id_perfil());
   $html_top_container = "<button class=\"w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey\" onclick=\"w3_open();\"><i class=\"fa fa-bars\"></i>  Menu</button>";
   
   $menu_lateral = new menu_lateral();
   $html_menu_lateral = $menu_lateral->exibe_html($user, $perfil);
- 
-  $dashboard = new dashboard();
-  $titulo_dashboard = "Erro";
-  $icone_dashboard = "fa fa-triangle-exclamation"; 
-  $link_voltar = "";
-  
-  //O "default" irá mostrar o consumo atual da unidade, caso seja um User
-  //Caso seja um Admin, irá mostrar quantos usuários estão cadastrados, quantos condomínios e quantas unidades
-  //Caso seja um Cadastrador, irá verificar exibir quantos usuários estão no Condomínio do Cadastrador, além do
-  //Consumo Total (m³ e em reais) do condomínio.
-
-  //Caso a ação seja uma específica (por exemplo, editando um Usuário, ou Cadastrando um consumo de uma unidade)
-  //o "dashboard" irá mostrar os formulários devidos.
-
+   
   if (!isset($_GET['acao'])) {
     unset($_SESSION['objeto']);
     unset($_SESSION['id']);
+    
     if ($html_body == "") {
-      if ($perfil->admin()) {
-        $html_body = $dashboard->dashboard_admin($user, $perfil);
-        $titulo_dashboard = "Dashboard do Admin";
+      if ($perfil->admin() || count($perfil->pega_ids_links_autorizado()) > count($links_perfil->pega_ids_links_publicos())) {
+        $titulo_dashboard = "Dashboard de Gestão";
         $icone_dashboard = "fa fa-dashboard";
-        if ($perfil->sindico()) {
-          $html_body .= "<div class=\"w3-clear\">&nbsp;</div>";
-          $html_body .= $dashboard->dashboard_sindico($user, $perfil);
-        }
-      } elseif ($perfil->cadastrador()) {
-        $html_body = $dashboard->dashboard_cadastrador($user, $perfil);
+        $html_body = $dashboard->dashboard_admin($user, $perfil);
+        $html_dashboard .= $dashboard->exibe_html($html_body, $titulo_dashboard, $icone_dashboard, $link_voltar); 
+      } 
+
+      if ($perfil->sindico()) {
+        $titulo_dashboard = "Dashboard do Síndico";
+        $icone_dashboard = "fa fa-dashboard";
+        $html_body = $dashboard->dashboard_sindico($user, $perfil);
+        $html_dashboard .= $dashboard->exibe_html($html_body, $titulo_dashboard, $icone_dashboard, $link_voltar);
+      } 
+      
+      if ($perfil->cadastrador()) {
         $titulo_dashboard = "Dashboard do Leiturista";
         $icone_dashboard = "fa fa-dashboard";
-        if ($perfil->sindico()) {
-          $html_body .= "<div class=\"w3-clear\">&nbsp;</div>";
-          $html_body .= $dashboard->dashboard_sindico($user, $perfil);
-        }
-      } elseif ($perfil->sindico()) {
-        $titulo_dashboard = "";
-        $icone_dashboard = "";
-        if (count($perfil->pega_ids_links_autorizado()) > 0) {
-          $html_body = $dashboard->dashboard_admin($user, $perfil);
-          $titulo_dashboard = "Dashboard de Gestão";
-          $icone_dashboard = "fa fa-dashboard";
-        }
-        $html_body .= "<div class=\"w3-clear\">&nbsp;</div>";
-        $html_body .= $dashboard->dashboard_sindico($user, $perfil);
-      } else {
-        $html_body = $dashboard->dashboard_usuario($user, $perfil);;
+        $html_body = $dashboard->dashboard_cadastrador($user, $perfil);
+        $html_dashboard .= $dashboard->exibe_html($html_body, $titulo_dashboard, $icone_dashboard, $link_voltar);
+      } 
+
+      if (isset($_GET['dashboard']) || !($perfil->admin() || $perfil->sindico() || $perfil->cadastrador())) {
         $titulo_dashboard = "Dashboard do Usuário";
-        $icone_dashboard = "fa fa-dashboard";        
-      }  
+        $icone_dashboard = "fas fa-chart-column";    
+        $html_body = $dashboard->dashboard_usuario($user, $perfil);
+        $html_dashboard = $dashboard->exibe_html($html_body, $titulo_dashboard, $icone_dashboard, $link_voltar);
+      }
     }
-  
-  
+   
   } elseif (isset($_GET['acao'])) {
     $_SESSION['objeto'] = $_GET['acao'];
     if (isset($_GET['id'])) {
@@ -109,9 +99,9 @@ if ($user->logado()) {
     } else {
       unset($_SESSION['id']);
     }
+    
     $html_body = "";
-    
-    
+     
     switch($_GET['acao']) {
       case "user":
         $processa_acao = $acquaccount->processa_user($user, $perfil, $_GET);
@@ -131,7 +121,14 @@ if ($user->logado()) {
         $relatorios = new relatorios();
         $processa_acao = $acquaccount->processa_relatorios($user, $perfil, $_GET, $relatorios);
       break; 
-
+      
+      case "contato":
+        $host = $_SERVER['HTTP_HOST'];
+        $protocol = $_SERVER['PROTOCOL'] = isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) ? 'https' : 'http';
+        $url = "$protocol://$host/?contato=true";
+        header("Location: {$url}");
+      break;
+      
       default:
         $processa_acao = $acquaccount->processa_acao($user, $perfil, $_GET);
         if (array_key_exists('erro', $processa_acao)) {
@@ -142,18 +139,38 @@ if ($user->logado()) {
     }  
     
     if (array_key_exists('erro', $processa_acao)) {
+      $titulo_dashboard = "Erro";
+      $icone_dashboard = "fa fa-triangle-exclamation"; 
       $html_body = $processa_acao['html_body'];
+      $html_dashboard .= $dashboard->exibe_html($html_body, $titulo_dashboard, $icone_dashboard, $link_voltar);
     } else {
       $titulo_dashboard = $processa_acao['titulo_dashboard'];
       $icone_dashboard = $processa_acao['icone_dashboard'];
       $html_body = $processa_acao['html_body'];
       $link_voltar = $processa_acao['link_voltar'];
+      $html_dashboard .= $dashboard->exibe_html($html_body, $titulo_dashboard, $icone_dashboard, $link_voltar);
     }
   } 
+}
+
+if (isset($_GET['contato'])) {
+  if (!$user->logado()) {
+    $user = new user();
+    $perfil = new perfil();
+  }
   
-  $html_body = $dashboard->exibe_html($html_body, $titulo_dashboard, $icone_dashboard, $link_voltar); 
+  $html_dashboard = "";
+  $processa_acao = $acquaccount->processa_contato($user, $perfil, $_GET);
+  $titulo_dashboard = $processa_acao['titulo_dashboard'];
+  $icone_dashboard = $processa_acao['icone_dashboard'];
+  $html_body = $processa_acao['html_body'];
+  $link_voltar = $processa_acao['link_voltar'];
+}
+
+if ($html_dashboard == "") {
+  $html_dashboard = $dashboard->exibe_html($html_body, $titulo_dashboard, $icone_dashboard, $link_voltar);
 }
 
 //Mostra o HTML
-echo $pagina_default->exibe_html($html_body, $html_top_container, $html_menu_lateral);
+echo $pagina_default->exibe_html($html_dashboard, $html_top_container, $html_menu_lateral);
 ?>

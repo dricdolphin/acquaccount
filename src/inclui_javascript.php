@@ -25,7 +25,8 @@ use Exception;
         <script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js\" async defer></script>
         <script src=\"https://apis.google.com/js/api.js\" async defer></script>
         <script src=\"https://www.gstatic.com/charts/loader.js\" async defer></script>
-        <script src=\"https://cdn.jsdelivr.net/npm/underscore@latest/underscore-umd-min.js\" async defer></script>
+        <script src=\"https://cdn.jsdelivr.net/npm/marked@5.0.2/lib/marked.umd.min.js\" async defer></script>
+        <script src=\"https://cdn.jsdelivr.net/npm/dompurify@3.0.3/dist/purify.min.js\" async defer></script>
         <script src=\"./js/processa_login_google.js\" async defer></script>
         <script src=\"./js/uploads.js\" async defer></script>
         <script src=\"./js/processa_csv.js\" async defer></script>

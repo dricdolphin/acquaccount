@@ -29,7 +29,11 @@ function onload_w3c() {
     progressBar = document.getElementById("progress-bar");
     form = document.getElementById("form_dados");
     div_graficos = document.getElementsByName("div_graficos");
-
+    
+    setTimeout(function(){
+      document.body.classList.toggle("preload");
+    },500); //Remove a classe que evita animações "precoces" no CSS
+    
     carrega_pagina();
 
     let signout_button = document.getElementById("signout_button");
@@ -37,34 +41,116 @@ function onload_w3c() {
       signout_button.onclick = () => {
         google.accounts.id.disableAutoSelect();
       }
-  }
+    }
  
-  if (objeto_existe(form)) {
-    carrega_valida_form(form);
-  }
+    let div_privacidade = document.getElementById("div_privacidade");
+    let div_privacidade_conteudo = document.getElementById("div_privacidade_conteudo");
+    if (objeto_existe(div_privacidade_conteudo)) {
+        fetch("./privacy.md")      
+        .then(response => response.blob())  
+        .then(blob => blob.text())          
+        .then(markdown => {                 
+          //Desabilita as funções não usadas do "marked"
+          marked.use({
+            mangle: false,
+            headerIds: false
+          });
+          div_privacidade_conteudo.innerHTML = DOMPurify.sanitize(marked.parse(markdown));
+        });
+    }
 
-  if (objeto_existe(div_graficos[0])) {
-    google.charts.load("current", {packages:["corechart"]});
-    Array.from(div_graficos).forEach(
+     
+    let div_termos_de_uso = document.getElementById("div_termos_de_uso");
+    let div_termos_de_uso_conteudo = document.getElementById("div_termos_de_uso_conteudo");
+    if (objeto_existe(div_termos_de_uso_conteudo)) {
+        fetch("./termos_de_uso.md")      
+        .then(response => response.blob())  
+        .then(blob => blob.text())          
+        .then(markdown => {                 
+          //Desabilita as funções não usadas do "marked"
+          marked.use({
+            mangle: false,
+            headerIds: false
+          });
+          div_termos_de_uso_conteudo.innerHTML = DOMPurify.sanitize(marked.parse(markdown));
+        });
+    }
+
+    let anchors = document.getElementsByTagName("a");
+    Array.from(anchors).forEach(
       (elemento) => {
-          window.addEventListener("resize",
-            debounce(
-              (event) => 
-              {
-                draw_chart(elemento);
+          if (elemento.id == "politica_privacidade") { 
+              elemento.addEventListener("click",
+              (event) => { 
+                  if (objeto_existe(div_privacidade)) {
+                      div_privacidade.style.display = "block";
+                      window.scrollTo(0,0);
+                  }
+                  event.preventDefault();
+                  }
+              );
+              
+              return;
+          }
+          
+          if (elemento.id == "termos_de_uso") { 
+            elemento.addEventListener("click",
+            (event) => { 
+                if (objeto_existe(div_termos_de_uso)) {
+                  div_termos_de_uso.style.display = "block";
+                    window.scrollTo(0,0);
+                }
+                event.preventDefault();
+                }
+            );
+            
+            return;
+          }
+
+          if (elemento.id == "fecha_alerta") {
+            elemento.addEventListener("click",
+            (event) => { 
+              fecha_alerta(elemento);
+              event.preventDefault();
               }
-          ,300));
-          pega_dados_charts(elemento);
-      }); 
-  }
+            );
+            
+            return;
+          }
+        }
+    );
+
+    if (objeto_existe(form)) {
+      carrega_valida_form(form);
+    }
+
+    if (objeto_existe(div_graficos[0])) {
+      google.charts.load("current", {packages:["corechart"]});
+      Array.from(div_graficos).forEach(
+        (elemento) => {
+            window.addEventListener("resize",
+              debounce(
+                (event) => 
+                {
+                  draw_chart(elemento);
+                }
+            ,300));
+            pega_dados_charts(elemento);
+        }); 
+    }
+}
+
+
+function fecha_alerta(elemento) {
+  elemento.parentElement.style.display = "none";
 }
 
 function w3_open() {
-  if (mySidebar.style.display === 'block') {
-    mySidebar.style.display = 'none';
+  if (mySidebar.style.display === "block") {
+    mySidebar.style.display = "none";
     overlayBg.style.display = "none";
   } else {
-    mySidebar.style.display = 'block';
+    mySidebar.style.display = "block";
     overlayBg.style.display = "block";
   }
 }

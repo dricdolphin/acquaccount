@@ -170,7 +170,7 @@ class perfil {
         $links_perfil = new links_perfil;
         $ids_links_autorizado = [];
         foreach ($links_perfil as $chave => $valor) {
-            if (in_array($links_perfil->pega_link($chave),$this->links_autorizado) || $links_perfil->publico($chave)) {
+            if (in_array($links_perfil->pega_link($chave),$this->links_autorizado) || $links_perfil->pega_publico($chave)) {
                 $ids_links_autorizado[] = $chave;
             }
         }

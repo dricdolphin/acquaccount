@@ -131,10 +131,18 @@ use Iterator;
         return $this->link[$id];
     }
 
-    function dashboard($id): bool {
+    function pega_dashboard($id): bool {
         return $this->dashboard[$id];
     }
+
+    function pega_publico($id): string  {
+        return $this->publico[$id];
+    }
     
+    function pega_ids_links_publicos() : array {
+        return array_keys($this->publico, true);
+    }
+
     function lista_checkbox($perfil, $ids_checked, $desabilita_edicao = '') {
         $html_checkbox = "";
         foreach ($this->link as $chave => $valor) {

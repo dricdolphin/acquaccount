@@ -38,7 +38,7 @@ function preventDefaults (e) {
   
     xhr.addEventListener("readystatechange", function(e) {
       if (xhr.readyState == 4 && xhr.status == 200) {
-        console.log(xhr.responseText);
+        //console.log(xhr.responseText);
         let obj = JSON.parse(xhr.responseText);
         if (objeto_existe(img)) {
             img.src = "./upload_files/" + obj.arquivo;
@@ -50,7 +50,7 @@ function preventDefaults (e) {
       }
       else if (xhr.readyState == 4 && xhr.status != 200) {
         alert("Ocorreu um erro ao realizar o upload!");
-        console.log(xhr.responseText);
+        //console.log(xhr.responseText);
         progressBar.value = 0;
         if (objeto_existe(img)) {
             img.src = "";

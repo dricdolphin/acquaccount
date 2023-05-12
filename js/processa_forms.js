@@ -30,7 +30,7 @@ function carrega_pagina() {
     }
 }
 
-function carrega_valida_form(form) {
+function carrega_valida_form(form) {   
     let email = document.getElementById("email");
     let CPF = document.getElementById("CPF");
     let CEP = document.getElementById("CEP");
@@ -48,6 +48,8 @@ function carrega_valida_form(form) {
     let selects = form.getElementsByTagName("select");
     let anchors = document.getElementsByTagName("a");
     
+
+
     Array.from(inputs).forEach(
         (elemento) => {
             elemento.addEventListener("click",
@@ -162,19 +164,40 @@ function carrega_valida_form(form) {
 
     Array.from(anchors).forEach(
         (elemento) => {
-            if (!elemento.id.includes("link_tabela_consumo_condominio_")) { return; }
-            elemento.addEventListener("click",
-                (event) => {
-                    let nome_tabela = elemento.id.substring(5);
-                    let tabela = document.getElementById(nome_tabela);
-                    let mes = document.getElementById('mes').value;
-                    let ano = document.getElementById('ano').value;
-                    let nome_condominio = tabela.getAttribute('data_nome_condominio').replaceAll(' ','_').toLowerCase();
-                    let filename = 'consumo_condominio_'+nome_condominio+'_'+ano+mes+'.csv';
-                    event.preventDefault();
-                    htmlToCSV(nome_tabela, filename);
-                }
-            );
+            if (elemento.id.includes("link_tabela_consumo_condominio_")) {  
+                elemento.addEventListener("click",
+                    (event) => {
+                        let nome_tabela = elemento.id.substring(5);
+                        let tabela = document.getElementById(nome_tabela);
+                        let mes = document.getElementById('mes').value;
+                        let ano = document.getElementById('ano').value;
+                        let nome_condominio = tabela.getAttribute('data_nome_condominio').replaceAll(' ','_').toLowerCase();
+                        let filename = 'consumo_condominio_'+nome_condominio+'_'+ano+mes+'.csv';
+                        event.preventDefault();
+                        htmlToCSV(nome_tabela, filename);
+                    }
+                );
+                
+                return;
+            }
+
+            if (elemento.id.includes("link_imprimir_tabela_consumo_condominio_")) {  
+                elemento.addEventListener("click",
+                    (event) => {
+                        let nome_tabela = elemento.id.substring(14);
+                        let tabela = document.getElementById(nome_tabela);
+                        let div_tabela = document.getElementById("div_" + nome_tabela);
+                        let mes = document.getElementById('mes').value;
+                        let ano = document.getElementById('ano').value;
+                        let nome_condominio = tabela.getAttribute('data_nome_condominio').replaceAll(' ','_').toLowerCase();
+                        let filename = 'consumo_condominio_'+nome_condominio+'_'+ano+mes+'.pdf';
+                        event.preventDefault();
+                        imprime_pdf(div_tabela, filename);
+                    }
+                );
+                
+                return;
+            }
         }
     );
 
