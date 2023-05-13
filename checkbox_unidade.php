@@ -68,7 +68,7 @@ if (isset($_SESSION['dados_cliente']) && isset($_POST['id_condominio']) && isset
     $checkbox_unidades = new  checkbox_unidade();
     $erro = [];
     if (!($perfil->admin() || $perfil->link_autorizado('user'))) {
-        $erro['erro'] = "true";
+        $erro['erro'] = true;
         $erro['mensagem_erro'] = "ACESSO NEGADO!";
     }
 
@@ -77,7 +77,7 @@ if (isset($_SESSION['dados_cliente']) && isset($_POST['id_condominio']) && isset
     die($json);
 }
 
-$erro['erro'] = "true";
+$erro['erro'] = true;
 $erro['mensagem_erro'] = "ACESSO NEGADO!";
 $json = json_encode($erro);
 die($json);

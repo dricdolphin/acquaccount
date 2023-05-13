@@ -28,6 +28,6 @@ define('GOOGLE_CLIENT_SECRET', 'GOOGLE_CLIENT_SECRET');
 define('GOOGLE_REDIRECT_URL', 'GOOGLE_REDIRECT_URL');
 
 //Configurações diversas
-define('EMAIL_ADMIN', 'admin@acquaccount.com.br');
-define('SITE', 'https://acquaccount.com.br');
+define('EMAIL_ADMIN', 'email@host.com.br');
+define('SITE', 'https://host.com.br');
 ?>

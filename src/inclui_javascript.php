@@ -31,9 +31,11 @@ use Exception;
         <script src=\"./js/uploads.js\" async defer></script>
         <script src=\"./js/processa_csv.js\" async defer></script>
         <script src=\"./js/processa_forms.js\" async defer></script>
+        <script src=\"./js/processa_cookies.js\" async defer></script>
         <script src=\"./js/valida_forms.js\" async defer></script>
         <script src=\"./js/w3c_js.js\" async defer></script>
-        <script src=\"./js/google_charts.js\" async defer></script>";
+        <script src=\"./js/google_charts.js\" async defer></script>
+        ";
         
         return  $html;
     }

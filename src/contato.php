@@ -61,39 +61,36 @@ class contato {
          $placeholder['email'] = "value=\"".$user->pega_email()."\" disabled";
       }
       
-      $html = "<form action=\"processa_contato.php\" class=\"w3-container w3-card-4 w3-light-grey w3-text-green w3-margin\">
+      $html = "<form action=\"processa_contato.php\" method=\"post\" 
+      class=\"w3-container w3-card-4 w3-light-grey w3-text-green w3-margin\" id=\"form_contato\"
+      onsubmit=\"return envia_form_contato(event, this);\">
       <h2 class=\"w3-center\">Contato</h2>
-       
       <div class=\"w3-row w3-section\">
         <div class=\"w3-col\" style=\"width:50px\"><i class=\"w3-xxlarge fa fa-user\"></i></div>
           <div class=\"w3-rest\">
             <input class=\"w3-input w3-border\" name=\"given_name\" type=\"text\" {$placeholder['given_name']}>
           </div>
       </div>
-      
       <div class=\"w3-row w3-section\">
         <div class=\"w3-col\" style=\"width:50px\"><i class=\"w3-xxlarge fa fa-user\"></i></div>
           <div class=\"w3-rest\">
             <input class=\"w3-input w3-border\" name=\"family_name\" type=\"text\" {$placeholder['family_name']}>
           </div>
       </div>
-      
       <div class=\"w3-row w3-section\">
         <div class=\"w3-col\" style=\"width:50px\"><i class=\"w3-xxlarge fa fa-envelope-open\"></i></div>
           <div class=\"w3-rest\">
             <input class=\"w3-input w3-border\" name=\"email\" type=\"text\" {$placeholder['email']}>
           </div>
       </div>
-      
       <div class=\"w3-row w3-section\">
         <div class=\"w3-col\" style=\"width:50px\"><i class=\"w3-xxlarge fa fa-pencil\"></i></div>
           <div class=\"w3-rest\">
             <input class=\"w3-input w3-border\" name=\"mensagem\" type=\"text\" placeholder=\"Mensagem ao Administrador do Sistema\">
           </div>
       </div>
-      
       <p class=\"w3-center\">
-      <button class=\"w3-button w3-section w3-green w3-ripple\"> Enviar </button>
+      <button class=\"w3-button w3-section w3-green w3-ripple\" type=\"submit\" form=\"form_contato\" value=\"submit\" id=\"form_submit\"> Enviar </button>
       </p>
       </form>";
   

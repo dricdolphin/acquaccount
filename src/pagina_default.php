@@ -50,14 +50,19 @@ class pagina_default {
     return "<div style='float: right;'><b><i class=\"fa fa-arrow-left-long\"></i><a href='{$acao}'> Voltar</a></b></div>";
   }
 
-  function exibe_html($html_body, $html_top_container = "", $html_menu_lateral = "") {
+  function exibe_html($user, $perfil, $html_body, $html_top_container = "", $html_menu_lateral = "") {
     $inclui_javascript = new inclui_javascript();
-    $interval = new DateTime("now");
+    $html_javascript = $inclui_javascript->exibe_html();
+    $interval = new DateTimeImmutable("now");
     $ano = $interval->format('Y');
     
     $class_pagina_principal = "";
     if ($html_menu_lateral != "") {
-      $class_pagina_principal = "pagina_principal";
+      $class_pagina_principal = " pagina_principal";
+    }
+
+    if (!$user->logado() && str_contains($html_body, "Enviar")) {
+      $class_pagina_principal .= " contato_nao_logado";
     }
 
     $html = "<!DOCTYPE html>
@@ -73,7 +78,7 @@ class pagina_default {
         html,body,h1,h2,h3,h4,h5 {font-family: \"Raleway\", sans-serif}
         </style>
         <title>Acquaccount - Individualização de consumo de água para condomínios</title>
-        {$inclui_javascript->exibe_html()}
+        {$html_javascript}
       </head>
       <body class=\"w3-light-grey preload div_para_imprimir\" onload=\"onload_w3c()\">
       <!-- Top container -->

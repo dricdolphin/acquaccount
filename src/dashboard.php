@@ -88,7 +88,7 @@ use Exception;
         <div class=\"w3-quarter w3-padding-small div_para_imprimir\">
             <div class=\"w3-container {$w3_cor} w3-padding-16 div_para_imprimir\">
                 {$icone_deletar}
-                <div class=\"w3-left div_para_imprimir\"><i class=\"{$icone} w3-xxxlarge\" {$titulo_icone}> &nbsp; </i></div>
+                <div class=\"w3-left div_para_imprimir\"><i class=\"{$icone} w3-xxlarge\" {$titulo_icone}> &nbsp; </i></div>
                 {$qtd}
                 <div class=\"w3-clear div_para_imprimir\"></div>
                     <h4>{$link}</h4>

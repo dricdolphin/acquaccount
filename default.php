@@ -32,6 +32,7 @@ $pagina_default = new pagina_default();
 session_start();
 
 $user = new user();
+$perfil = new perfil();
 $processa_login = $acquaccount->processa_login($_SESSION, $_POST, $user);
 $html_body = $processa_login['html_body'];
 $html_top_container = $processa_login['html_top_container'];
@@ -50,7 +51,6 @@ if ($user->logado()) {
   //Atualiza o horário do Login para manter a sessão do usuário ativa por 8 horas
   $_SESSION['date_time_login'] = new DateTimeImmutable("now");
   
-  $perfil = new perfil();
   $links_perfil = new links_perfil();
   $perfil->pega_perfil_por_id($user->pega_id_perfil());
   $html_top_container = "<button class=\"w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey\" onclick=\"w3_open();\"><i class=\"fa fa-bars\"></i>  Menu</button>";
@@ -172,5 +172,5 @@ if ($html_dashboard == "") {
 }
 
 //Mostra o HTML
-echo $pagina_default->exibe_html($html_dashboard, $html_top_container, $html_menu_lateral);
+echo $pagina_default->exibe_html($user, $perfil, $html_dashboard, $html_top_container, $html_menu_lateral);
 ?>

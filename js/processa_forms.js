@@ -666,8 +666,7 @@ function envia_dados_para_salvar(evento, elemento, deletar = false) {
             dados_form[id_elemento].push(valor_elemento);
         } else {
             dados_form[id_elemento] = valor_elemento;
-        }
-         
+        }  
     });
     
     Array.from(selects).forEach((elemento) => { 
@@ -677,4 +676,46 @@ function envia_dados_para_salvar(evento, elemento, deletar = false) {
     });
 
     return envia_dados(url, (json) => { return processa_resposta_salvamento(json, elemento); }, elemento, dados_form);
+}
+
+function envia_form_contato(event, form_contato) {
+    event.preventDefault();
+    let cookie_enviou_contato = getCookie("enviou_form_contato");
+    if (cookie_enviou_contato != "") {
+        let json = {};
+        json.erro = true;
+        json.mensagem_erro = "VOCÊ SÓ PODE ENVIAR UMA MENSAGEM POR DIA!";
+        processa_resposta_form_contato(json, form_contato);
+        return;
+    }
+
+    let url = "processa_contato.php";
+    let dados_form = {};
+    let inputs = form_contato.getElementsByTagName("input");
+    let submit = document.getElementById("form_submit");
+    submit.disabled = true;
+
+    Array.from(inputs).forEach((elemento) => { 
+        let valor_elemento = elemento.value;
+        let id_elemento = elemento.name;
+        dados_form[id_elemento] = valor_elemento;
+     });
+    
+     return envia_dados(url, (json) => { return processa_resposta_form_contato(json, form_contato); }, form_contato, dados_form);
+}
+
+function processa_resposta_form_contato (json, elemento) {
+    if (json.erro) {  
+        mostra_caixa_mensagem(json.mensagem_erro,'w3-red');
+    } else {
+        mostra_caixa_mensagem("DADOS ENVIADOS COM SUCESSO PARA O ADMINISTRADOR DO SISTEMA!");
+        setCookie("enviou_form_contato","true",1);
+    }
+    
+    setTimeout(
+        () => { 
+            document.location.href="/";
+        }, 2000);
+    
+    return;
 }

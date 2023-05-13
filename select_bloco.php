@@ -55,7 +55,7 @@ if (isset($_SESSION['dados_cliente']) && isset($_POST['id_condominio']))
     }
 }
 
-$erro['erro'] = "true";
+$erro['erro'] = true;
 $erro['mensagem_erro'] = "ACESSO NEGADO!";
 $json = json_encode($erro);
 die($json);

@@ -159,7 +159,7 @@ class dados_chart {
 session_start();
 $conecta_db = new conecta_db(); //Variável GLOBAL de conexão com o banco de dados
 $dados = [];
-$dados['erro'] = "true";
+$dados['erro'] = true;
 
 if (isset($_SESSION['dados_cliente']) && isset($_POST['objeto'])) {
     $user = new user();
@@ -172,13 +172,13 @@ if (isset($_SESSION['dados_cliente']) && isset($_POST['objeto'])) {
 if ($perfil->admin() || $perfil->cadastrador()) {
     if ($_POST['objeto'] == "consumo_condominio" || $_POST['objeto'] == "consumo_unidade") {
         $valor_dados_chart = $dados_chart->pega_dados($user, $perfil, $_POST);
-        $dados['erro'] = "false";
+        $dados['erro'] = false;
     }  elseif (str_contains($_POST['objeto'], "consumo_condominio_")) {
         $id_condominio = substr($_POST['objeto'], 19);
         if ($perfil->admin() || in_array($id_condominio,$perfil->pega_ids_condominio())) {
             $valor_dados_chart = $dados_chart->pega_dados_condominio($user, $perfil, 
             array("objeto" => "consumo_condominio", "id_condominio" => $id_condominio));
-           $dados['erro'] = "false";
+           $dados['erro'] = false;
         }
 
     }
@@ -188,7 +188,7 @@ if ($perfil->admin() || $perfil->cadastrador()) {
         if (in_array($id_unidade,$user->pega_ids_unidade())) {
             $valor_dados_chart = $dados_chart->pega_dados_usuario($user, $perfil, 
             array("objeto" => "consumo_unidade", "id_unidade" => $id_unidade));
-           $dados['erro'] = "false";
+           $dados['erro'] = false;
         }
     }
 }
@@ -198,7 +198,7 @@ if ($dados['erro'] == "false") {
     $dados['options_chart'] = $valor_dados_chart['options_chart'];   
 } else {
     $dados = [];
-    $dados['erro'] = "true";
+    $dados['erro'] = true;
     $dados['mensagem_erro'] = "ACESSO NEGADO!";
 }
 

@@ -112,7 +112,7 @@ if (isset($_POST['id']) && isset($_SESSION['objeto']) && isset($_SESSION['dados_
     }
     
     if (!$perfil->autorizado($user, $_SESSION['objeto'], $id_condominio, $id_unidade)) {
-        $erro['erro'] = "true";
+        $erro['erro'] = true;
         $erro['mensagem_erro'] = "USUÁRIO SEM AUTORIZAÇÃO PARA REALIZAR ESSA AÇÃO!";
         $json = json_encode($erro);
         die($json);
@@ -129,7 +129,7 @@ if (isset($_POST['id']) && isset($_SESSION['objeto']) && isset($_SESSION['dados_
         die($resposta);
     }
     //Se chegou até aqui, é porque deu algum erro
-    $erro['erro'] = "true";
+    $erro['erro'] = true;
     $erro['mensagem_erro'] = "Erro! Não foi possível alterar o objeto '{$_POST['objeto']}'!";
     $erro['dados_post']['id'] = $_POST['id'];
     $erro['dados_session']['id'] = $_SESSION['id'];
@@ -137,7 +137,7 @@ if (isset($_POST['id']) && isset($_SESSION['objeto']) && isset($_SESSION['dados_
     die($json);
 }
 
-$erro['erro'] = "true";
+$erro['erro'] = true;
 $erro['mensagem_erro'] = "ACESSO NEGADO!";
 $erro['dados_post'] = $_POST;
 $erro['dados_session']['id'] = $_SESSION['id'];

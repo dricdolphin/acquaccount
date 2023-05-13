@@ -33,7 +33,7 @@ class pega_validador {
 session_start();
 $conecta_db = new conecta_db(); //Variável GLOBAL de conexão com o banco de dados
 $dados = [];
-$dados['erro'] = "true";
+$dados['erro'] = true;
 $user = new user();
 $user->pega_user_por_email($_SESSION['dados_cliente']['email']);
 $perfil = new perfil();
@@ -45,9 +45,9 @@ if (isset($_SESSION['dados_cliente']) && isset($_POST['objeto']) && isset($_POST
     $unidade->pega_unidade_por_id($_POST['id_unidade']);
     if ($perfil->cadastrador() && $perfil->autorizado($user, $_POST['objeto'], 
         $unidade->pega_id_condominio(), $unidade->pega_id())) {
-        $dados['erro'] = "false";
+        $dados['erro'] = false;
     } elseif ($perfil->admin()) {
-        $dados['erro'] = "false";
+        $dados['erro'] = false;
     }  
 }
 
@@ -56,7 +56,7 @@ if ($dados['erro'] == "false") {
     $dados['id_validador'] = $user->pega_id();
 } else {
     $dados = [];
-    $dados['erro'] = "true";
+    $dados['erro'] = true;
     $dados['mensagem_erro'] = "ACESSO NEGADO!";
 }
 
