@@ -43,9 +43,9 @@ function carrega_valida_form(form) {
     let ids_unidade = document.getElementsByName("ids_unidade");
     let ids_condominio = document.getElementsByName("ids_condominio");
 
-    let inputs = form.getElementsByTagName("input");
+    let inputs = form_dados.getElementsByTagName("input");
     let valor_input = [];
-    let selects = form.getElementsByTagName("select");
+    let selects = form_dados.getElementsByTagName("select");
     let anchors = document.getElementsByTagName("a");
     
 
@@ -461,14 +461,20 @@ function altera_endereco(json) {
 }
 
 function muda_mes_ano(mes_ano) {
-    let mes = mes_ano.substring(0,2);
-    let ano = mes_ano.substring(2);
     let url_atual = location.href;
     let url_nova = url_atual
+    let mes = mes_ano.substring(0,2);
+    let ano = mes_ano.substring(2);
     let today = new Date();
     let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     let yyyy = today.getFullYear();
     let mes_ano_atual = mm + "" + yyyy;
+
+    if (url_atual.includes("#")) {
+        let posicao_id = url_atual.indexOf("#");
+        url_atual = url_atual.substring(0, posicao_id);
+        url_nova = url_atual;
+    }
 
     if (url_atual.includes("&mes_ano=")) { 
         url_nova = url_atual.substring(0, url_atual.length-15);
@@ -477,7 +483,7 @@ function muda_mes_ano(mes_ano) {
     if (mes_ano != mes_ano_atual) {
         url_nova =  url_nova+"&mes_ano="+mes+""+ano;
     }
-
+    console.log(url_nova);
     location.replace(url_nova);
 }
 
@@ -613,6 +619,9 @@ function salva_objeto(evento, elemento, funcao_retorno = "") {
         evento.preventDefault(); 
         return false;
     }
+
+    if (!objeto_existe(form_dados)) { return false; }
+    if (document.body.innerHTML.includes("Data das Medições:")) { return false; }
     
     em_salvamento = true;
     let promise_valida_form = valida_form(evento,elemento);
@@ -659,8 +668,8 @@ function processa_resposta_salvamento(json, elemento) {
 function envia_dados_para_salvar(evento, elemento, deletar = false) {
     let url = "processa_objeto.php";
     let dados_form = {};
-    let inputs = form.getElementsByTagName("input");
-    let selects = form.getElementsByTagName("select");
+    let inputs = form_dados.getElementsByTagName("input");
+    let selects = form_dados.getElementsByTagName("select");
     
     Array.from(inputs).forEach((elemento) => { 
         let valor_elemento = elemento.value;
@@ -706,8 +715,8 @@ function envia_form_contato(event, form_contato) {
     let url = "processa_contato.php";
     let dados_form = {};
     let inputs = form_contato.getElementsByTagName("input");
-    let submit = document.getElementById("form_submit");
-    submit.disabled = true;
+    let botao_form_submit = document.getElementById("form_submit");
+    botao_form_submit.disabled = true;
 
     Array.from(inputs).forEach((elemento) => { 
         let valor_elemento = elemento.value;

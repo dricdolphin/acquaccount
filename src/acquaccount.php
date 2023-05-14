@@ -215,7 +215,8 @@ class acquaccount {
           if (isset($dados_get['mes_ano'])) {
             $texto_link_voltar .= "&mes_ano={$dados_get['mes_ano']}";
           }
-          
+          $texto_link_voltar .= "#{$id_condominio}_{$id_unidade}";
+
           $this->link_voltar = $pagina_default->link_voltar($texto_link_voltar);
           $this->html_body = $consumo_objeto->exibe_html($user, $perfil, $id_objeto, $mes, $ano);
         } else {

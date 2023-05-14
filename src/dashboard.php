@@ -57,7 +57,7 @@ use Exception;
         return $html;
     } 
 
-    private function dashboard_quarter($nome, $qtd, $icone, $w3_cor, $link='', $icone_deletar=false) {
+    private function dashboard_quarter($nome, $qtd, $icone, $w3_cor, $link='', $icone_deletar=false, $id_objeto = "") {
         if ($icone_deletar) {
             $icone_deletar = "<a style='float: right;' href=\"#\" title=\"Deletar\" onclick=\"deleta_objeto('{$link}',event,this)\"><i class=\"fas fa-trash-can w3-large\"> &nbsp; </i></a>";
         } else {
@@ -83,9 +83,12 @@ use Exception;
             $titulo_icone = "title=\"{$icone['titulo_icone']}\"";
             $icone = $icone['icone'];
         }
+        if ($id_objeto != "") {
+            $id_objeto = " id=\"{$id_objeto}\"";
+        }
 
         $html = "          
-        <div class=\"w3-quarter w3-padding-small div_para_imprimir\">
+        <div class=\"w3-quarter w3-padding-small div_para_imprimir\"{$id_objeto}>
             <div class=\"w3-container {$w3_cor} w3-padding-16 div_para_imprimir\">
                 {$icone_deletar}
                 <div class=\"w3-left div_para_imprimir\"><i class=\"{$icone} w3-xxlarge\" {$titulo_icone}> &nbsp; </i></div>
@@ -360,6 +363,8 @@ use Exception;
         $html = "";
         $link = substr(strrchr(get_class($objeto), '\\'), 1);
         $objeto = __NAMESPACE__ . '\\' . $link;
+        $unidade = new unidade();
+        $condominio = new condominio();
         $objeto = new $objeto();
         if ($perfil->admin() || $perfil->cadastrador()) {
             $dados_select_meses = $this->select_meses_dashboard($user, $perfil, $objeto, $dados_get);
@@ -373,14 +378,16 @@ use Exception;
                 $consumo_por_id = "pega_{$link}_por_id";
                 $objeto->$consumo_por_id ($valor['id']);
                 $id_objeto="&id={$valor['id']}";
+                $id_condominio_e_unidade = "";
                 
                 if (isset($valor['id_unidade'])) {
-                    $objeto_consumo = new unidade();
+                    $objeto_consumo = $unidade;
                     $objeto_consumo->pega_unidade_por_id($valor['id_unidade']);
                     $id_objeto_consumo = "id_unidade";
                     $valor_id_objeto_consumo = $valor['id_unidade'];
+                    $id_condominio_e_unidade = $objeto_consumo->pega_id_condominio() . "_" . $objeto_consumo->pega_id();
                 } elseif (isset($valor['id_condominio'])) {
-                    $objeto_consumo = new condominio();
+                    $objeto_consumo = $condominio;
                     $objeto_consumo->pega_condominio_por_id($valor['id_condominio']);
                     $id_objeto_consumo = "id_condominio";
                     $valor_id_objeto_consumo = $valor['id_condominio'];
@@ -392,7 +399,8 @@ use Exception;
                 $cor = $objeto->pega_cor();
 
                 $html .= $this->dashboard_quarter($nome,$ascendentes, $icone, $cor,
-                "{$link}&{$id_objeto_consumo}={$valor_id_objeto_consumo}{$dados_select_meses['mes_ano']}{$id_objeto}", $icone_deletar = false);
+                    "{$link}&{$id_objeto_consumo}={$valor_id_objeto_consumo}{$dados_select_meses['mes_ano']}{$id_objeto}", 
+                    $icone_deletar = false, $id_condominio_e_unidade);
                 if ($numero_quarters == 4) {
                     $html .= "<div class=\"w3-clear div_para_imprimir\"></div>";
                     $numero_quarters = 0;

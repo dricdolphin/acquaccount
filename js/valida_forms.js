@@ -1,8 +1,8 @@
 function valida_form(event, input) {
-    let form = document.getElementById("form_dados");
+    let form_dados = document.getElementById("form_dados");
 
-    let inputs = form.querySelectorAll("input:not([disabled])");
-    let selects = form.querySelectorAll("select:not([disabled])");
+    let inputs = form_dados.querySelectorAll("input:not([disabled])");
+    let selects = form_dados.querySelectorAll("select:not([disabled])");
     let flag_todos_inputs_alterados = Array.from(inputs).every((elemento) => { flag_foi_alterado.includes(elemento); });
 
     let form_validou = true;
@@ -123,8 +123,8 @@ function valida_CEP(event, elemento) {
 
 function valida_form_contato(evento, elemento) {
     let inputs = document.getElementsByTagName("input");
-    let form_submit = document.getElementById("form_submit");
-    form_submit.disabled = true;
+    let botao_form_submit = document.getElementById("form_submit");
+    botao_form_submit.disabled = true;
 
     let elementos_com_valor = 0;
     Array.from(inputs).forEach(
@@ -136,6 +136,6 @@ function valida_form_contato(evento, elemento) {
     );
     
     if (elementos_com_valor == inputs.length) {
-        form_submit.disabled = false;
+        botao_form_submit.disabled = false;
     }
 }

@@ -9,7 +9,8 @@ var uploadProgress = [];
 var imagem_consumo;
 var fileElem;
 var label_button;
-var form;
+var form_dados;
+var form_contato;
 var div_graficos = [];
 
 function objeto_existe(objeto) {
