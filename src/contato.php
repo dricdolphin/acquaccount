@@ -90,7 +90,7 @@ class contato {
           </div>
       </div>
       <p class=\"w3-center\">
-      <button class=\"w3-button w3-section w3-green w3-ripple\" type=\"submit\" form=\"form_contato\" value=\"submit\" id=\"form_submit\"> Enviar </button>
+      <button class=\"w3-button w3-section w3-green w3-ripple\" type=\"submit\" form=\"form_contato\" value=\"submit\" id=\"form_submit\" disabled> Enviar </button>
       </p>
       </form>";
   

@@ -280,6 +280,20 @@ function carrega_valida_form(form) {
     }
 }
 
+function carrega_valida_form_contato(form_contato) {
+    let inputs = document.getElementsByTagName("input");
+    Array.from(inputs).forEach(
+        (elemento) => {
+            elemento.addEventListener("keyup",
+            debounce((event) => {
+                valida_form_contato(event, elemento);
+            }, 500)
+            );
+        }
+    );
+}
+
+
 function muda_validador(evento, dados) {
     let checkbox_validado = document.getElementById("validado");
     let id_validador = document.getElementById("id_validador");

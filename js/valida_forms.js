@@ -120,3 +120,22 @@ function valida_CEP(event, elemento) {
     if (document.activeElement == elemento) { mostra_caixa_mensagem("CEP INVÁLIDO!","w3-red"); }
     return false;  
 }
+
+function valida_form_contato(evento, elemento) {
+    let inputs = document.getElementsByTagName("input");
+    let form_submit = document.getElementById("form_submit");
+    form_submit.disabled = true;
+
+    let elementos_com_valor = 0;
+    Array.from(inputs).forEach(
+        (elemento) => {
+            if (elemento.value != "") {
+                elementos_com_valor++;
+            }
+        }
+    );
+    
+    if (elementos_com_valor == inputs.length) {
+        form_submit.disabled = false;
+    }
+}

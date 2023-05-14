@@ -27,7 +27,8 @@ function onload_w3c() {
     fileElem = document.getElementById("fileElem");
     label_button = document.getElementById("label_button");
     progressBar = document.getElementById("progress-bar");
-    form = document.getElementById("form_dados");
+    form_dados = document.getElementById("form_dados");
+    form_contato = document.getElementById("form_contato");
     div_graficos = document.getElementsByName("div_graficos");
     
     setTimeout(function(){
@@ -120,8 +121,12 @@ function onload_w3c() {
         }
     );
 
-    if (objeto_existe(form)) {
-      carrega_valida_form(form);
+    if (objeto_existe(form_dados)) {
+      carrega_valida_form(form_dados);
+    }
+
+    if (objeto_existe(form_contato)) {
+      carrega_valida_form_contato(form_contato);
     }
 
     if (objeto_existe(div_graficos[0])) {
