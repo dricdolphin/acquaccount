@@ -279,8 +279,8 @@ class consumo_unidade {
       }
 
       $valor_m3_validado = "";
-      $label_validado = " Validar a leitura";
-      if (!($perfil->admin() || $perfil->cadastrador())) {
+      $label_validado = " Validar a leitura";  
+      if (!($perfil->admin() || $perfil->cadastrador() || $perfil->autorizado($user, "consumo_unidade", $unidade->pega_id_condominio()))) {
          $valor_m3_validado = "disabled";
          $chk_validado = "disabled";
       }

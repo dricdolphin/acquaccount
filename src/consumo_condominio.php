@@ -269,7 +269,7 @@ class consumo_condominio {
          <div class=\"form_cadastro\" id=\"drop-area\">
             <p>Carregue a imagem da Conta de Água do Condomínio</p>
             <input type=\"file\" id=\"fileElem\" accept=\"image/*\" onchange=\"handleFiles(this.files)\">
-            <label class=\"button\" for=\"fileElem\" id=\"label_button\" {$desabilita_edicao}>Selecione a imagem</label>
+            <label class=\"button {$valor_m3_validado}\" for=\"fileElem\" id=\"label_button\">Selecione a imagem</label>
             <input type=\"hidden\" id=\"imagem_consumo\" value =\"{$this->imagem_consumo}\">
          </form>
          <progress id=\"progress-bar\" max=100 value=0></progress>
