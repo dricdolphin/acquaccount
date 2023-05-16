@@ -51,7 +51,7 @@ if (isset($_SESSION['dados_cliente']) && isset($_POST['objeto']) && isset($_POST
     }  
 }
 
-if ($dados['erro'] == "false") {
+if ($dados['erro'] == false) {
     $dados['nome_validador'] = $user->pega_nome_completo();
     $dados['id_validador'] = $user->pega_id();
 } else {

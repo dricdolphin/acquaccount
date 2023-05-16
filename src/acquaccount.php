@@ -48,9 +48,9 @@ class acquaccount {
             $dados_session['token'] = $dados_post['credential'];
             if (!$user->pega_user_por_email($dados_cliente['email'])) {
               $this->html_body = "<meta http-equiv=\"refresh\" content=\"10\">
-              <h4>Parece que você ainda não está cadastrado no sistema!<br>
-              Caso seja proprietário de alguma unidade sob gestão do sistema Acquaccount,<br>
-              por favor entre em contato com seu Síndico ou com o Administrador do Sistema!</h4>\n";
+              <div class=\"w3-center\"><h3>Parece que você ainda não está cadastrado no sistema!</h3>
+              <p>Caso seja proprietário de alguma unidade sob gestão do sistema Acquaccount,<br>
+              por favor entre em contato com seu Síndico ou com o Administrador do Sistema!</p></div>\n";
               $cliente->revokeToken($dados_session['token']);
         
               unset($dados_session['token']);

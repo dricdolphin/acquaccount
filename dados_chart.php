@@ -193,7 +193,7 @@ if ($perfil->admin() || $perfil->cadastrador()) {
     }
 }
 
-if ($dados['erro'] == "false") {
+if ($dados['erro'] == false) {
     $dados['dados_chart'] = $valor_dados_chart['dados_chart'];
     $dados['options_chart'] = $valor_dados_chart['options_chart'];   
 } else {

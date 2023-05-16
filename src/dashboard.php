@@ -202,8 +202,8 @@ use Exception;
 
         //Serão 2 quarters, um para o Consumo do Condomíno e outro para o Consumo das Unidades
         $html .= "<div>Data das Medições: {$mes}/{$ano}</div><br>
-        <div name=\"div_graficos\" id=\"consumo_condominio\" class=\"w3-half\"></div>
-        <div name=\"div_graficos\" id=\"consumo_unidade\" class=\"w3-half\"></div>";
+        <div class=\"w3-half\" name=\"div_graficos\" id=\"consumo_condominio\"></div>
+        <div class=\"w3-half\" name=\"div_graficos\" id=\"consumo_unidade\"></div>";
 
         return $html;
     }
@@ -296,13 +296,13 @@ use Exception;
                 </div>";
             }
             
-            $html .= "<div class=\w3-container div_para_imprimir\">
+            $html .= "<div class=\"w3-container div_para_imprimir\">
             <h3>{$nome_unidade}</h3><br>
             {$html_links_meses_consumo}
             </div>
             <div class=\"w3-clear div_para_imprimir\"> &nbsp; </div>";
             
-            $html .= "<div name=\"div_graficos div_para_imprimir\" id=\"consumo_unidade_{$id_unidade}\" class=\"w3-container\"></div>";
+            $html .= "<div class=\"w3-container div_para_imprimir\" name=\"div_graficos\" id=\"consumo_unidade_{$id_unidade}\"></div>";
             $html .= "<div class=\"w3-clear div_para_imprimir\"> &nbsp; </div>";
         }
 
@@ -479,7 +479,7 @@ use Exception;
                 <h3>{$nome_condominio}</h3>";
             
             $html .= "
-                <div name=\"div_graficos div_para_imprimir\" id=\"consumo_condominio_{$id_condominio}\" class=\"w3-container div_para_imprimir\"></div>
+                <div class=\"w3-container div_para_imprimir\" name=\"div_graficos\" id=\"consumo_condominio_{$id_condominio}\"></div>
                 <div class=\"w3-clear div_para_imprimir\"> &nbsp; </div>
                 <div class=\"w3-container w3-center div_para_imprimir\">
                     <div class=\"w3-tag w3-indigo div_para_imprimir\">Unidades: {$numero_unidades}</div>

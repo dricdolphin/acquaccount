@@ -61,8 +61,8 @@ class pagina_default {
       $class_pagina_principal = " pagina_principal";
     }
 
-    if (!$user->logado() && str_contains($html_body, "Enviar")) {
-      $class_pagina_principal .= " contato_nao_logado";
+    if (!$user->logado()) {
+      $class_pagina_principal .= " nao_logado";
     }
 
     $html = "<!DOCTYPE html>

@@ -22,6 +22,14 @@ body.preload *{
     margin-top:72px;
 }
 
+.nao_logado {
+    margin-top: 42px;
+}
+
+.pagina_principal.nao_logado {
+    margin-top: 72px;
+}
+
 .no-margin-padding {
     margin: 0px;
     padding: 0px;
@@ -60,6 +68,10 @@ body.preload *{
     vertical-align: middle;
 }
 
+#img_imagem_consumo {
+    max-width: 100% !important;
+}
+
 .form_cadastro {
     margin: 2px;
     padding: 2px;
@@ -78,8 +90,10 @@ body.preload *{
     margin-top:75px;
 }
 
-.contato_nao_logado {
-    margin-top: 42px;
+.caixa_dados_salvo {
+    text-align: center; 
+    position: sticky; 
+    top: 72px;
 }
 
 .w3-quarter.w3-padding-small.div_para_imprimir
@@ -169,6 +183,22 @@ input[type=number] {
     .pagina_principal {
         margin-left:300px;
         margin-top:90px;
+    }
+    
+    .nao_logado {
+        margin-top: 100px;
+    }
+
+    .pagina_principal.nao_logado {
+        margin-top: 120px;
+    }
+
+    #gallery img {
+        width: 100% !important;
+    }
+
+    #img_imagem_consumo {
+        width: 100% !important;
     }
 }
 
