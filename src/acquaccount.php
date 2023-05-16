@@ -189,11 +189,9 @@ class acquaccount {
         if (isset($dados_get['id_unidade']) || isset($dados_get['id_condominio'])) {
           if ($perfil->cadastrador()) {
             if (!$perfil->autorizado($user, $dados_get['acao'], $id_condominio, $id_unidade)) { $pagina_default->link_pagina_principal(); }
-          } elseif (!($perfil->admin() || $perfil->cadastrador())) { 
-            if (substr(strrchr(get_class($consumo_objeto), '\\'), 1) == "consumo_unidade") {
-              if (!$perfil->autorizado($user, $dados_get['acao'], $id_condominio, $id_unidade)) { $pagina_default->link_pagina_principal(); }
-            } else { $pagina_default->link_pagina_principal(); }
-          }
+          } elseif (!($perfil->admin() || $perfil->cadastrador()) 
+            && !$perfil->autorizado($user, $dados_get['acao'], $id_condominio, $id_unidade)) 
+          { $pagina_default->link_pagina_principal(); }
 
           $verifica_consumo_objeto = "verifica_{$dados_get['acao']}";
           $id_consumo_objeto = $consumo_objeto->$verifica_consumo_objeto($id_objeto, $mes, $ano);
@@ -220,7 +218,7 @@ class acquaccount {
           $this->link_voltar = $pagina_default->link_voltar($texto_link_voltar);
           $this->html_body = $consumo_objeto->exibe_html($user, $perfil, $id_objeto, $mes, $ano);
         } else {
-          if ($perfil->admin() || $perfil->cadastrador()) {
+          if ($perfil->admin() || $perfil->cadastrador() || $perfil->link_autorizado($dados_get['acao'])) {
             $this->titulo_dashboard = $consumo_objeto->classe_plural();
             $this->html_body = $dashboard->dashboard_consumo($user, $perfil, $consumo_objeto, $dados_get);
           } else {
@@ -250,7 +248,7 @@ class acquaccount {
         $ano = $interval->format('Y');
       }
 
-      if (!($perfil->admin() || $perfil->cadastrador())) {
+      if (!($perfil->admin() || $perfil->cadastrador() || $perfil->link_autorizado($dados_get['acao']))) {
         $pagina_default->link_pagina_principal();
       }
       

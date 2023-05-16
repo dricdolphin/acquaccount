@@ -366,7 +366,7 @@ use Exception;
         $unidade = new unidade();
         $condominio = new condominio();
         $objeto = new $objeto();
-        if ($perfil->admin() || $perfil->cadastrador()) {
+        if ($perfil->admin() || $perfil->cadastrador() || $perfil->link_autorizado($link)) {
             $dados_select_meses = $this->select_meses_dashboard($user, $perfil, $objeto, $dados_get);
             $html = $dados_select_meses['html'];
             $consumo_por_mes = "pega_{$link}_por_mes";

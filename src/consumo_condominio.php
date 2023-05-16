@@ -238,7 +238,10 @@ class consumo_condominio {
          $this->ano = $ano;
       }
 
-
+      $desabilita_edicao = "disabled";
+      if ($perfil->admin() || ($perfil->cadastrador() && $perfil->autorizado($user, "consumo_condominio", $id_condominio))) {
+         $desabilita_edicao = "";
+      }
 
       $datas_option = $this->select_meses($this->mes, $this->ano);
        
@@ -258,21 +261,20 @@ class consumo_condominio {
          </div>
          
          <div class=\"form_cadastro\">
-            <label for=\"valor_m3\">Leitura (m³)</label>: <input type=\"text\" pattern=\"[0-9]*\" class=\"w3-input\" id=\"valor_m3\" name=\"valor_m3\" value=\"{$this->valor_m3}\"><br>
-            <label for=\"consumo\">Consumo (m³)</label>: <input type=\"text\" pattern=\"[0-9]*\" class=\"w3-input\" id=\"consumo\" name=\"consumo\" value=\"{$this->consumo}\"><br>
-            <label for=\"valor_minimo_reais\">Valor Consumo Mínimo (R$)</label>: <input type=\"text\" pattern=\"[0-9]*[,]{0,1}[0-9]{0,2}\" class=\"w3-input\" id=\"valor_minimo_reais\" name=\"valor_minimo_reais\" value=\"{$this->valor_minimo_reais}\"><br>
-            <label for=\"valor_reais\">Valor Total(R$)</label>: <input type=\"text\" pattern=\"[0-9]*[,]{0,1}[0-9]{0,2}\" class=\"w3-input\" id=\"valor_reais\" name=\"valor_reais\" value=\"{$this->valor_reais}\">
+            <label for=\"valor_m3\">Leitura (m³)</label>: <input type=\"text\" pattern=\"[0-9]*\" class=\"w3-input\" id=\"valor_m3\" name=\"valor_m3\" value=\"{$this->valor_m3}\" {$desabilita_edicao}><br>
+            <label for=\"consumo\">Consumo (m³)</label>: <input type=\"text\" pattern=\"[0-9]*\" class=\"w3-input\" id=\"consumo\" name=\"consumo\" value=\"{$this->consumo}\" {$desabilita_edicao}><br>
+            <label for=\"valor_minimo_reais\">Valor Consumo Mínimo (R$)</label>: <input type=\"text\" pattern=\"[0-9]*[,]{0,1}[0-9]{0,2}\" class=\"w3-input\" id=\"valor_minimo_reais\" name=\"valor_minimo_reais\" value=\"{$this->valor_minimo_reais}\" {$desabilita_edicao}><br>
+            <label for=\"valor_reais\">Valor Total(R$)</label>: <input type=\"text\" pattern=\"[0-9]*[,]{0,1}[0-9]{0,2}\" class=\"w3-input\" id=\"valor_reais\" name=\"valor_reais\" value=\"{$this->valor_reais}\" {$desabilita_edicao}>
          </div>
          <div class=\"form_cadastro\" id=\"drop-area\">
             <p>Carregue a imagem da Conta de Água do Condomínio</p>
             <input type=\"file\" id=\"fileElem\" accept=\"image/*\" onchange=\"handleFiles(this.files)\">
-            <label class=\"button\" for=\"fileElem\" id=\"label_button\">Selecione a imagem</label>
+            <label class=\"button\" for=\"fileElem\" id=\"label_button\" {$desabilita_edicao}>Selecione a imagem</label>
             <input type=\"hidden\" id=\"imagem_consumo\" value =\"{$this->imagem_consumo}\">
          </form>
          <progress id=\"progress-bar\" max=100 value=0></progress>
          <div id=\"gallery\" class=\"img-magnifier-container\">
             <img id=\"img_imagem_consumo\" src=\"{$this->imagem_consumo}\">
-            
          </div>
          </div>
          </div>

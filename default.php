@@ -63,7 +63,9 @@ if ($user->logado()) {
     unset($_SESSION['id']);
     
     if ($html_body == "") {
-      if ($perfil->admin() || count($perfil->pega_ids_links_autorizado()) > count($links_perfil->pega_ids_links_publicos())) {
+      if ($perfil->admin() || 
+        count($perfil->pega_ids_links_autorizado()) > (count($links_perfil->pega_ids_links_publicos()) 
+        + count($links_perfil->pega_ids_links_sem_dashboard()))) {
         $titulo_dashboard = "Dashboard de Gestão";
         $icone_dashboard = "fa fa-dashboard";
         $html_body = $dashboard->dashboard_admin($user, $perfil);

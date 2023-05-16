@@ -169,18 +169,24 @@ if (isset($_SESSION['dados_cliente']) && isset($_POST['objeto'])) {
     $dados_chart = new dados_chart();
 }
 
-if ($perfil->admin() || $perfil->cadastrador()) {
+$acao = "";
+if (str_contains($_POST['objeto'], "consumo_condominio_")) {
+    $acao = "consumo_condominio";
+} else {
+    $acao = $_POST['objeto'];
+}
+
+if ($perfil->admin() || $perfil->cadastrador() || $perfil->link_autorizado($acao)) {
     if ($_POST['objeto'] == "consumo_condominio" || $_POST['objeto'] == "consumo_unidade") {
         $valor_dados_chart = $dados_chart->pega_dados($user, $perfil, $_POST);
         $dados['erro'] = false;
     }  elseif (str_contains($_POST['objeto'], "consumo_condominio_")) {
         $id_condominio = substr($_POST['objeto'], 19);
-        if ($perfil->admin() || in_array($id_condominio,$perfil->pega_ids_condominio())) {
+        if ($perfil->admin() || $perfil->autorizado($user, $acao, $id_condominio,)) {
             $valor_dados_chart = $dados_chart->pega_dados_condominio($user, $perfil, 
             array("objeto" => "consumo_condominio", "id_condominio" => $id_condominio));
            $dados['erro'] = false;
         }
-
     }
 } elseif (!($perfil->admin() || $perfil->cadastrador())) {
     if (str_contains($_POST['objeto'], "consumo_unidade_")) {

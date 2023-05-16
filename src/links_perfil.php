@@ -143,6 +143,10 @@ use Iterator;
         return array_keys($this->publico, true);
     }
 
+    function pega_ids_links_sem_dashboard() : array {
+        return array_keys($this->dashboard, false);
+    }
+
     function lista_checkbox($perfil, $ids_checked, $desabilita_edicao = '') {
         $html_checkbox = "";
         foreach ($this->link as $chave => $valor) {
