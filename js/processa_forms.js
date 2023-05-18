@@ -330,6 +330,7 @@ function muda_validador(evento, dados) {
             let label_button = document.getElementById("label_button");
 
             label_validado.innerHTML = " Leitura validada por "+dados.nome_validador+" em "+data_validado;
+            checkbox_validado.checked = true;
 
             checkbox_validado.disabled = true;
             fileElem.disabled = true;

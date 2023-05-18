@@ -150,11 +150,12 @@ use Iterator;
     function lista_checkbox($perfil, $ids_checked, $desabilita_edicao = '') {
         $html_checkbox = "";
         foreach ($this->link as $chave => $valor) {
-           $checkbox_checked = "";
-           if (in_array($valor, $ids_checked)) {
-              $checkbox_checked = "checked";
-           }
-           $html_checkbox .= "<input type=\"checkbox\" name=\"links_autorizado\" id=\"links_autorizado[]\" value=\"{$valor}\" {$checkbox_checked} {$desabilita_edicao}> - <label for=\"links_autorizado\">{$this->nome[$chave]}</label><br>";
+            if ($this->publico[$chave]) { continue;}
+            $checkbox_checked = "";
+            if (in_array($valor, $ids_checked)) {
+                $checkbox_checked = "checked";
+            }
+            $html_checkbox .= "<input type=\"checkbox\" name=\"links_autorizado\" id=\"links_autorizado[]\" value=\"{$valor}\" {$checkbox_checked} {$desabilita_edicao}> - <label for=\"links_autorizado\">{$this->nome[$chave]}</label><br>";
         }
         
         return $html_checkbox;

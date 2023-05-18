@@ -13,8 +13,8 @@ use Exception;
  * 
  * Sistema de Individualização de consumo de água em condomínios
  * 
- * @version 1.0.5
- * @date 2023-05-16
+ * @version 1.0.6
+ * @date 2023-05-18
  * 
  * @author Adriano Di Piero Filho <adrianodipiero@gmail.com>
  */
