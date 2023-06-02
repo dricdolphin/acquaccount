@@ -57,7 +57,7 @@ use Exception;
         return $html;
     } 
 
-    private function dashboard_quarter($nome, $qtd, $icone, $w3_cor, $link='', $icone_deletar=false, $id_objeto = "") {
+    private function dashboard_quarter($nome, $qtd, $icone, $w3_cor, $link='', $icone_deletar=false, $id_objeto = "", $sub_nome = "") {
         if ($icone_deletar) {
             $icone_deletar = "<a style='float: right;' href=\"#\" title=\"Deletar\" onclick=\"deleta_objeto('{$link}',event,this)\"><i class=\"fas fa-trash-can w3-large\"> &nbsp; </i></a>";
         } else {
@@ -67,7 +67,13 @@ use Exception;
         if ($link != '') {
             $estilo = "";
             if (str_contains($nome, "@")) { $estilo = " line-break: anywhere;"; }
-            $link = "<a style=\"text-decoration: none;{$estilo}\" href=\"?acao={$link}\" title=\"{$nome}\" >{$nome}</a>";
+            if ($sub_nome != "") {
+                $link = "<a style=\"text-decoration: none;{$estilo}\" href=\"?acao={$link}\" title=\"{$nome}\" >{$nome}<br>
+                <span class=\"w3-tiny\">{$sub_nome}</span>
+                </a>";
+            } else {
+                $link = "<a style=\"text-decoration: none;{$estilo}\" href=\"?acao={$link}\" title=\"{$nome}\" >{$nome}</a>";
+            }
         } else {
             $link = $nome;
         }
@@ -328,8 +334,9 @@ use Exception;
                     $deleta_user = false;
                 } 
                 $user_nome = $user_edita->pega_nome_completo();
+                $user_cpf = $user_edita->pega_cpf();
                 $html .= $this->dashboard_quarter("{$user_nome}","",$user_edita->pega_icone_perfil(),
-                $user_edita->pega_cor(),"user&id={$user_edita->pega_id()}", $deleta_user);
+                $user_edita->pega_cor(),"user&id={$user_edita->pega_id()}", $deleta_user, $id_objeto = "", $sub_nome = "{$user_cpf}");
                 
                 if ($numero_quarters == 4) {
                     $html .= "<div class=\"w3-clear div_para_imprimir\"></div>";

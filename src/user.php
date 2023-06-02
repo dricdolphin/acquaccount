@@ -200,6 +200,10 @@ class user {
         return $this->id;
     }
 
+    function pega_cpf() {
+        return $this->CPF;
+    }
+
     function pega_ids_unidade() {
         return $this->ids_unidade;
     }

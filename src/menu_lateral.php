@@ -72,6 +72,7 @@ class menu_lateral {
     </div>
     <div class=\"w3-col w3-bar\">
       <span>Olá, <strong>{$user->pega_nome()}</strong></span><br>
+      <div class=\"w3-small\"><strong>Perfil:</strong> {$perfil->pega_nome()}</div>
       {$links_dashboard}
       <a href=\"?acao=user&id={$user->pega_id()}\" class=\"w3-bar-item w3-button\" title=\"Perfil\"><i class=\"fa fa-user\"></i></a>
       <a href=\"logout.php\" id=\"signout_button\" class=\"w3-bar-item w3-button g_id_signout\" title=\"Logout\"><i class=\"fa fa-arrow-right-from-bracket\"></i></a>
