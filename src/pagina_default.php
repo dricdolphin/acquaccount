@@ -50,6 +50,42 @@ class pagina_default {
     return "<div style='float: right;'><b><i class=\"fa fa-arrow-left-long\"></i><a href='{$acao}'> Voltar</a></b></div>";
   }
 
+  function exibe_aviso_lgpd($user, $perfil, $html_top_container) {
+    $html_body = "<div class=\"w3-container pagina_lgpd\">
+    <input type=\"hidden\" id=\"id_user\" value=\"".$user->pega_id()."\">
+    <div>
+    <h3 class=\"w3-indigo w3-center\"><b>LEIA COM ATENÇÃO!</b></h3>
+    <p>Este site usa Cookies e respeita a Lei Geral de Proteção de Dados. Para  acessá-lo, é necessário seu consentimento 
+    <b>explícito</b>.</p>
+    <h4><b>Quais dados este site coleta:</b></h4>
+    <p>Este site coleta dados pessoais não-sensíveis, como CPF, Nome Completo e e-mail, para permitir sua identificação inequívoca,
+    além de dados sensíveis sobre sua propriedade de unidades autônomas residenciais nos condomínios que contrataram
+    a Acquaccount, bem como o registro do consumo de água de suas unidades.</p>
+    <p>Estes dados são utilizados somente para os fins a que este site se destina, ou seja, para a gestão da individualização
+    de consumo de água.</p>
+    <p>Os dados são disponíveis somente ao próprio usuário, ao Síndico de seu condomínio, Leiturista e ao Administrador do Sistema,
+    não podendo ser cedidos, vendidos ou disponibilizados para nenhum outro fim senão ao que se destina este site.</p>
+    </div>
+    <div>
+    <h4><b>Para que servem nossos Cookies:</b></h4>
+    <p>Este site usa Cookies para identificar o usuário, garantir seu login e realizar cálculos de métricas de desempenho.</p>
+    <p>Os Cookies não tem nenhuma outra finalidade e não são utilizados para rastrear as ações do usuário fora de nosso site.</p>
+    </div>
+    <div>
+    <p>Ao clicar no botão \"ACEITO OS TERMOS\" abaixo, você informa ter lido nossa 
+    <a href=\"#\" id=\"politica_privacidade\">Política de Privacidade</a> 
+    e nossos <a href='#' id=\"termos_de_uso\">Termos de Uso</a>, e <b>explicitamente</b> aceita o uso e tratamento de seus dados pessoais
+    conforme informado.</p>
+    <p>Caso não aceite nossos termos, não poderemos disponibilizar o acesso ao sistema para você.</p>
+    </div>
+    <div class=\"w3-container w3-center\">
+    <a href=\"#\" id=\"aceite_lgpd\" class=\"w3-button w3-green\" title=\"Aceito os termos\">ACEITO OS TERMOS</a>&nbsp; &nbsp; &nbsp;<a href=\"logout.php?\" id=\"signout_button\" class=\"w3-button w3-red g_id_signout\" title=\"Logout\">NÃO ACEITO OS TERMOS</a>
+    </div>
+    </div>";
+    
+    return $this->exibe_html($user, $perfil, $html_body, $html_top_container);
+  }
+
   function exibe_html($user, $perfil, $html_body, $html_top_container = "", $html_menu_lateral = "") {
     $inclui_javascript = new inclui_javascript();
     $html_javascript = $inclui_javascript->exibe_html();
@@ -70,6 +106,8 @@ class pagina_default {
       <head>
         <meta charset=\"UTF-8\">
         <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
+        <title>Acquaccount - Individualização de consumo de água para condomínios</title>
+        <meta name=\"description\" content=\"Descubra o Acquaccount: o sistema de medição de água para condomínios. Monitore o consumo individualizado, identifique desperdícios e promova a economia de água. Suporte técnico especializado. Contribua para a sustentabilidade. Entre em contato para saber mais.\"/>
         <link rel=\"stylesheet\" href=\"https://www.w3schools.com/w3css/4/w3.css\">
         <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css?family=Raleway\">
         <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css\"/>
@@ -77,7 +115,6 @@ class pagina_default {
         <style>
         html,body,h1,h2,h3,h4,h5 {font-family: \"Raleway\", sans-serif}
         </style>
-        <title>Acquaccount - Individualização de consumo de água para condomínios</title>
         {$html_javascript}
       </head>
       <body class=\"w3-light-grey preload div_para_imprimir\" onload=\"onload_w3c()\">

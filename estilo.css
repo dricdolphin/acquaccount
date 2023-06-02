@@ -40,6 +40,10 @@ body.preload *{
     text-decoration: underline;
 }
 
+.pagina_lgpd {
+    margin-top: 70px;
+}
+
 #drop-area {
     border: 2px dashed #ccc;
     border-radius: 10px;
@@ -190,6 +194,10 @@ input[type=number] {
     }
 
     .pagina_principal.nao_logado {
+        margin-top: 120px;
+    }
+
+    .pagina_lgpd {
         margin-top: 120px;
     }
 

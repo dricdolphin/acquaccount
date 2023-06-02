@@ -13,8 +13,8 @@ use Exception;
  * 
  * Sistema de Individualização de consumo de água em condomínios
  * 
- * @version 1.0.6
- * @date 2023-05-18
+ * @version 1.0.7
+ * @date 2023-06-02
  * 
  * @author Adriano Di Piero Filho <adrianodipiero@gmail.com>
  */
@@ -58,6 +58,11 @@ if ($user->logado()) {
   $menu_lateral = new menu_lateral();
   $html_menu_lateral = $menu_lateral->exibe_html($user, $perfil);
    
+  if ($user->autorizado_lgpd() == false) {
+    echo $pagina_default->exibe_aviso_lgpd($user, $perfil, $html_top_container);
+    die();
+  }
+
   if (!isset($_GET['acao'])) {
     unset($_SESSION['objeto']);
     unset($_SESSION['id']);

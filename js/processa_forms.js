@@ -30,7 +30,16 @@ function carrega_pagina() {
     }
 }
 
-function carrega_valida_form(form) {   
+function carrega_lgpd() {
+    let aceite_lgpd = document.getElementById("aceite_lgpd");
+
+    aceite_lgpd.addEventListener("click", (event) => {
+        event.preventDefault();
+        return aceita_lgpd();
+    });
+}
+
+function carrega_valida_form(form) { 
     let email = document.getElementById("email");
     let CPF = document.getElementById("CPF");
     let CEP = document.getElementById("CEP");
@@ -742,4 +751,21 @@ function processa_resposta_form_contato (json, elemento) {
         }, 2000);
     
     return;
+}
+
+function aceita_lgpd() {
+    let url = "processa_lgpd.php";
+    let dados_form = {};
+    let id_user = document.getElementById("id_user");
+    dados_form['id']= id_user.value;
+    
+    envia_dados(url, (json) => {
+        if (json.erro) {
+            console.log(json);
+        }
+        setTimeout(
+            () => { 
+                document.location.href="/";
+            }, 1000);
+    }, aceite_lgpd, dados_form);
 }

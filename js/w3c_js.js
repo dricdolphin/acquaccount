@@ -12,6 +12,7 @@ var label_button;
 var form_dados;
 var form_contato;
 var div_graficos = [];
+var aceite_lgpd;
 
 function objeto_existe(objeto) {
   if (objeto != 'undefined' && objeto != null) {
@@ -31,6 +32,7 @@ function onload_w3c() {
     form_dados = document.getElementById("form_dados");
     form_contato = document.getElementById("form_contato");
     div_graficos = document.getElementsByName("div_graficos");
+    aceite_lgpd = document.getElementById("aceite_lgpd");
     
     setTimeout(function(){
       document.body.classList.toggle("preload");
@@ -128,6 +130,10 @@ function onload_w3c() {
 
     if (objeto_existe(form_contato)) {
       carrega_valida_form_contato(form_contato);
+    }
+
+    if (objeto_existe(aceite_lgpd)) {
+      carrega_lgpd();
     }
 
     if (objeto_existe(div_graficos[0])) {

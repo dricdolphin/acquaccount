@@ -15,6 +15,7 @@ CPF VARCHAR(11) NOT NULL,
 picture VARCHAR(255) DEFAULT NULL,
 ids_condominio TEXT NOT NULL DEFAULT 'a:0:{}',
 ids_unidade TEXT NOT NULL DEFAULT 'a:0:{}',
+autorizado_lgpd BOOLEAN DEFAULT false,
 data_criado TIMESTAMP NOT NULL DEFAULT current_TIMESTAMP(),
 data_modificado TIMESTAMP NOT NULL DEFAULT current_TIMESTAMP() ON UPDATE current_TIMESTAMP(),
 UNIQUE(email), UNIQUE(CPF)

@@ -23,7 +23,8 @@ class user {
     private $CPF;
     private $picture;
     private $ids_condominio = [];
-    private $ids_unidade = [];    
+    private $ids_unidade = [];
+    private $autorizado_lgpd = 0;
     private $data_criado;
     private $data_modificado;
 
@@ -35,6 +36,7 @@ class user {
         $this->email = null;
         $this->CPF = null;
         $this->picture = null;
+        $this->autorizado_lgpd = 0;
         $this->ids_condominio = [];
         $this->ids_unidade = [];    
         $this->data_criado = null;
@@ -61,6 +63,7 @@ class user {
         $this->email = $dados_usuario['email'];
         $this->CPF = $dados_usuario['CPF'];
         $this->picture = $dados_usuario['picture'];
+        $this->autorizado_lgpd = $dados_usuario['autorizado_lgpd'];
         $this->data_criado = $dados_usuario['data_criado'];
         $this->data_modificado = $dados_usuario['data_modificado'];
 
@@ -110,6 +113,20 @@ class user {
         }
 
         return false;
+    }
+
+    function autorizado_lgpd() {
+        return $this->autorizado_lgpd;
+    }
+
+    function salva_aceite_lgpd() {
+        global $conecta_db;
+        
+        $this->autorizado_lgpd = 1;
+        
+        $dados = [];
+        $dados['autorizado_lgpd'] = 1;
+        return $this->salva_user($dados);
     }
 
     function data_login_valido() {
