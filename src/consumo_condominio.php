@@ -274,7 +274,7 @@ class consumo_condominio {
          </form>
          <progress id=\"progress-bar\" max=100 value=0></progress>
          <div id=\"gallery\" class=\"img-magnifier-container\">
-            <img id=\"img_imagem_consumo\" src=\"{$this->imagem_consumo}\">
+            <img id=\"img_imagem_consumo\" src=\"{$this->imagem_consumo}\" alt=\"Foto da leitura do hidrômetro\">
          </div>
          </div>
          </div>

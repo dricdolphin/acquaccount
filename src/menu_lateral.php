@@ -68,7 +68,7 @@ class menu_lateral {
   <nav class=\"w3-sidebar w3-collapse w3-white w3-animate-left menu_lateral\" id=\"mySidebar\"><br>
   <div class=\"w3-container w3-row\">
     <div class=\"w3-col s4\">
-      <img src=\"{$user->pega_imagem()}\" class=\"w3-circle w3-margin-right\" style=\"width:46px\">
+      <img src=\"{$user->pega_imagem()}\" class=\"w3-circle w3-margin-right\" style=\"width:46px\" alt=\"Foto do perfil\">
     </div>
     <div class=\"w3-col w3-bar\">
       <span>Olá, <strong>{$user->pega_nome()}</strong></span><br>

@@ -21,7 +21,7 @@ class pagina_default {
 
   function exibe_pagina_inicial() {
     $html = "<h3><span style='color: blue; font-weight: bold;'>Acquaccount</span> - Individualização de Água em Condomínios</h3>
-    <div><img src='img/torneira.png' style='float: left; width: 190px; height: auto; margin: 3px;'>
+    <div><img src='img/torneira.png' style='float: left; width: 190px; height: auto; margin: 3px;' alt='Imagem do mundo, pingando água e uma mão evitando o desperdício'>
     <p>Bem-vindo ao <span style='color: blue;'>Acquaccount</span>, sua solução completa para Individualização de Água em Condomínios.</p><br>
     <p>Entendemos que a gestão eficiente dos recursos hídricos é uma preocupação crescente em todo o mundo, e é por isso que 
     oferecemos um sistema de individualização de água preciso e confiável para condomínios.</p>
@@ -32,7 +32,7 @@ class pagina_default {
     pronta para fornecer todo o suporte necessário para garantir a qualidade do serviço prestado.</p>
     </div>
     <div><span style='color: blue; font-weight: bold;'>Acquaccount</span> - um sistema integrado de leitura e individualização de água para condomínios.
-    Entre em <a href='?contato=true' id=\"contato\">contato</a> conosco e veja como reduzir seus custos e ainda economizar água!
+    Entre em <a href='?contato=true'>contato</a> conosco e veja como reduzir seus custos e ainda economizar água!
     </div>";
 
     return $html;
@@ -102,7 +102,7 @@ class pagina_default {
     }
 
     $html = "<!DOCTYPE html>
-    <html>
+    <html lang=\"pt-BR\">
       <head>
         <meta charset=\"UTF-8\">
         <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
