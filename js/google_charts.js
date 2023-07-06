@@ -4,7 +4,7 @@ var options_chart = [];
 function pega_dados_charts(elemento) {
     let url = "dados_chart.php";
     let dados = {'objeto': elemento.id
-    };
+        };
     envia_dados(url, (json) => { carrega_dados(elemento, json); }, elemento, dados);
 }
 

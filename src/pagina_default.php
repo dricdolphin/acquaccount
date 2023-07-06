@@ -45,8 +45,9 @@ class pagina_default {
     header("Location: {$url}");
   }
 
-  function link_voltar($acao='/') {
-    if ($acao != '/') { $acao = "?acao={$acao}"; }
+  function link_voltar($acao="/", $desvia_link="") {
+    if ($acao != "/") { $acao = "?acao={$acao}"; }
+    if ($desvia_link != "") { $acao="?{$desvia_link}"; }
     return "<div style='float: right;'><b><i class=\"fa fa-arrow-left-long\"></i><a href='{$acao}'> Voltar</a></b></div>";
   }
 
@@ -107,10 +108,10 @@ class pagina_default {
         <meta charset=\"UTF-8\">
         <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
         <title>Acquaccount - Individualização de consumo de água para condomínios</title>
-        <meta name=\"description\" content=\"Descubra o Acquaccount: o sistema de medição de água para condomínios. Monitore o consumo individualizado, identifique desperdícios e promova a economia de água. Suporte técnico especializado. Contribua para a sustentabilidade. Entre em contato para saber mais.\"/>
+        <meta name=\"description\" content=\"Descubra o Acquaccount: o sistema de medição de água para condomínios. Monitore o consumo individualizado, identifique desperdícios e promova a economia de água. Suporte técnico especializado. Contribua para a sustentabilidade. Entre em contato para saber mais.\">
         <link rel=\"stylesheet\" href=\"https://www.w3schools.com/w3css/4/w3.css\">
         <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css?family=Raleway\">
-        <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css\"/>
+        <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css\">
         <link rel=\"stylesheet\" href=\"estilo.css\">
         <style>
         html,body,h1,h2,h3,h4,h5 {font-family: \"Raleway\", sans-serif}
@@ -120,27 +121,27 @@ class pagina_default {
       <body class=\"w3-light-grey preload div_para_imprimir\" onload=\"onload_w3c()\">
       <!-- Top container -->
       <div class=\"w3-bar w3-top w3-black w3-large div_para_imprimir\" style=\"z-index:4\">{$html_top_container}
-        <span class=\"w3-bar-item w3-right div_para_imprimir\"><div class=\"logo_acquaccount div_para_imprimir\">&nbsp;</div></span>
+        <div class=\"w3-bar-item w3-right logo_acquaccount div_para_imprimir\">&nbsp;</div>
       </div>
       {$html_menu_lateral}
       <!-- !PAGE CONTENT! -->
       <div class=\"w3-main {$class_pagina_principal} div_para_imprimir\">
       {$html_body}
       </div>
-      </body>
       <!-- Footer -->
       <footer class=\"w3-container w3-padding-16 w3-light-grey\">
         <div class=\"w3-center\"><p>Acquaccount&copy; - {$ano} &nbsp; | &nbsp; Estilos por <a href=\"https://www.w3schools.com/w3css/default.asp\" target=\"_blank\">w3.css</a></p>
         <p><a href=\"#\" id=\"politica_privacidade\">Política de Privacidade</a> | <a href='#' id=\"termos_de_uso\">Termos de Uso</a> | <a href='?contato=true' id=\"contato\">Contato</a></p></div>
       </footer>
       <div id=\"div_privacidade\" class=\"w3-panel w3-pale-blue div_privacidade\">
-        <a href=\"#\" id=\"fecha_alerta\" class=\"w3-button w3-large w3-display-topright\">×</a>
+        <a href=\"#\" id=\"fecha_alerta_div_privacidade\" class=\"w3-button w3-large w3-display-topright\">×</a>
         <div id=\"div_privacidade_conteudo\">&nbsp;</div>
       </div>
       <div id=\"div_termos_de_uso\" class=\"w3-panel w3-pale-blue div_privacidade\">
-      <a href=\"#\" id=\"fecha_alerta\" class=\"w3-button w3-large w3-display-topright\">×</a>
+      <a href=\"#\" id=\"fecha_alerta_div_termos_de_uso\" class=\"w3-button w3-large w3-display-topright\">×</a>
       <div id=\"div_termos_de_uso_conteudo\">&nbsp;</div>
     </div>
+    </body>
     </html>";
 
     return $html;

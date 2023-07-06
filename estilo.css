@@ -8,7 +8,7 @@ body.preload *{
     background-repeat: no-repeat;
     background-size: contain;
     height: 56px;
-    width: 280px;
+    width: 280px !important;
 }
 
 .menu_lateral {
@@ -24,6 +24,10 @@ body.preload *{
 
 .nao_logado {
     margin-top: 42px;
+}
+
+.w3-main.nao_logado {
+    margin-top: -32px;
 }
 
 .pagina_principal.nao_logado {
@@ -173,7 +177,7 @@ input[type=number] {
     }
 }
 
-@media (max-width: 418px) {
+@media (max-width: 556px) {
     .menu_lateral {
         z-index:3; 
         width:300px; 
@@ -195,6 +199,18 @@ input[type=number] {
 
     .pagina_principal.nao_logado {
         margin-top: 120px;
+    }
+
+    .w3-main.nao_logado {
+        margin-top: 32px;
+    }
+    
+    .logo_acquaccount {
+        background-image: url('img/logo_acquaccount_preto.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        height: 50px;
+        width: 275px !important;       
     }
 
     .pagina_lgpd {

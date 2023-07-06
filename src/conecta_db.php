@@ -194,8 +194,13 @@ class conecta_db {
         return $this->pega_chaves_objeto($objeto, array('id'), $ordem, $chave_where, $chave_valor);
     }
 
-    private function query_ultimos_doze_meses() {
-        $interval = new DateTime("now");
+    private function query_ultimos_doze_meses($mes = "", $ano = "") {
+        if ($mes == "" && $ano == "") {
+            $interval = new DateTime("now");
+        } else {
+            $interval = new DateTime("{$ano}-{$mes}-01 00:00:00");
+        }
+        
         $mes = $interval->format('m');
         $ano = $interval->format('Y');
         $datas_temp_query = "SELECT '{$mes}' AS mes, '{$ano}' AS ano FROM DUAL";
@@ -333,33 +338,41 @@ class conecta_db {
     }
 
     function salva_dados_condominio ($objeto, $dados, $id = '') {
-        return $this->salva_objeto($objeto, $dados,"id",$id);
+        return $this->salva_objeto($objeto, $dados, "id",$id);
     }
 
     function salva_dados_bloco ($objeto, $dados, $id = '') {
-        return $this->salva_objeto($objeto, $dados,"id",$id);
+        return $this->salva_objeto($objeto, $dados, "id", $id);
     }
 
     function salva_dados_unidade ($objeto, $dados, $id = '') {
-        return $this->salva_objeto($objeto, $dados,"id",$id);
+        return $this->salva_objeto($objeto, $dados, "id", $id);
     }
 
     function salva_dados_consumo_unidade ($objeto, $dados, $id = '') {
-        return $this->salva_objeto($objeto, $dados,"id",$id);
+        return $this->salva_objeto($objeto, $dados, "id", $id);
     }
 
     function salva_dados_consumo_condominio ($objeto, $dados, $id = '') {
-        return $this->salva_objeto($objeto, $dados,"id",$id);
+        return $this->salva_objeto($objeto, $dados, "id", $id);
     }
 
     function salva_dados_perfil ($objeto, $dados, $id = '') {
-        return $this->salva_objeto($objeto, $dados,"id",$id);
+        return $this->salva_objeto($objeto, $dados, "id", $id);
     }
 
     function salva_dados_user ($objeto, $dados, $id = '') {
-        return $this->salva_objeto($objeto, $dados,"id",$id);
+        return $this->salva_objeto($objeto, $dados, "id", $id);
     }
    
+    function salva_dados_cache_relatorio_condominio($objeto, $dados) {
+        return $this->salva_objeto($objeto, $dados, "id");
+    }
+
+    function salva_dados_cache_relatorio_unidades($objeto, $dados) {
+        return $this->salva_objeto($objeto, $dados, "id");
+    }
+
     function deleta_bloco($objeto, $id) {
         return $this->deleta_objeto($objeto,"id",$id);
     }
@@ -623,11 +636,16 @@ class conecta_db {
 
 
     private function pega_consumos_objeto($user, $perfil, $id_objeto, $objeto) {
-        $datas_temp_query = $this->query_ultimos_doze_meses();
+        if (isset($_SESSION['mes'])) {
+            $datas_temp_query = $this->query_ultimos_doze_meses($_SESSION['mes'],$_SESSION['ano']);
+        } else {
+            $datas_temp_query = $this->query_ultimos_doze_meses();
+        }
         $tabela = substr(strrchr(get_class($objeto), '\\'), 1);
         $coluna_consumo = "";
         if ($tabela == "condominio") {
-            $coluna_consumo = "(CASE WHEN consumo_{$tabela}.consumo IS NULL THEN 0 ELSE consumo_{$tabela}.consumo END) AS consumo,";
+            $coluna_consumo = "(CASE WHEN consumo_{$tabela}.consumo IS NULL THEN 0 ELSE consumo_{$tabela}.consumo END) AS consumo,
+            (CASE WHEN consumo_{$tabela}.valor_reais IS NULL THEN 0 ELSE consumo_{$tabela}.valor_reais END) AS valor_reais,";
         }
         $stmt = $this->db->prepare("SELECT consumo_{$tabela}.id AS id, datas_temp.mes AS mes, datas_temp.ano AS ano,
         CONCAT(datas_temp.mes,'/',  datas_temp.ano) AS mes_ano, 
@@ -666,6 +684,61 @@ class conecta_db {
         AND consumo_unidade.mes=? AND consumo_unidade.ano=?
         WHERE unidade.id_condominio=?
         ORDER BY LENGTH(unidade.id), unidade.id");
+        $stmt->bind_param("sss", $mes, $ano, $id_condominio);
+        $stmt->execute();
+
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    function pega_cache_consumos_unidade($user, $perfil, $id_unidade) {
+        if (isset($_SESSION['mes'])) {
+            $datas_temp_query = $this->query_ultimos_doze_meses($_SESSION['mes'],$_SESSION['ano']);
+        } else {
+            $datas_temp_query = $this->query_ultimos_doze_meses();
+        }
+        
+        $stmt = $this->db->prepare("SELECT relatorio_unidade.id, relatorio_unidade.id_unidade, unidade.numero AS numero_unidade,
+        relatorio_unidade.valor_m3 AS valor_m3, relatorio_unidade.valor_reais AS valor_reais, consumo_unidade.valor_m3 AS medicao, 
+        datas_temp.mes AS mes, datas_temp.ano AS ano, CONCAT(datas_temp.mes, datas_temp.ano) AS mes_ano
+        FROM (
+            {$datas_temp_query}
+        ) AS datas_temp
+        LEFT JOIN relatorio_unidade
+        ON relatorio_unidade.mes = datas_temp.mes AND relatorio_unidade.ano = datas_temp.ano
+        AND relatorio_unidade.id_unidade=?
+        LEFT JOIN consumo_unidade 
+        ON consumo_unidade.mes = relatorio_unidade.mes AND consumo_unidade.ano = relatorio_unidade.ano
+        AND consumo_unidade.id_unidade=relatorio_unidade.id_unidade
+        LEFT JOIN unidade
+        ON unidade.id = relatorio_unidade.id_unidade
+        ORDER BY datas_temp.ano, datas_temp.mes");
+        $stmt->bind_param("s", $id_unidade);
+        $stmt->execute();
+
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+    }
+
+    function pega_cache_consumos_unidades_condominio_mes_ano($user, $perfil, $id_condominio, $mes, $ano) {
+        $stmt = $this->db->prepare("SELECT relatorio_unidade.id, relatorio_unidade.id_unidade, unidade.numero AS numero_unidade,
+        relatorio_unidade.valor_m3 AS valor_m3, relatorio_unidade.valor_reais AS valor_reais
+        FROM relatorio_unidade
+        LEFT JOIN unidade
+        ON relatorio_unidade.id_unidade = unidade.id
+        WHERE unidade.id_condominio=? AND relatorio_unidade.mes=? AND relatorio_unidade.ano=?
+        ORDER BY LENGTH(unidade.id), unidade.id");
+        $stmt->bind_param("sss", $mes, $ano, $id_condominio);
+        $stmt->execute();
+
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    function pega_cache_consumo_condominio_mes_ano($user, $perfil, $id_condominio, $mes, $ano) {
+        $stmt = $this->db->prepare("SELECT relatorio_condominio.id, relatorio_condominio.taxa_minima AS taxa_minima, 
+        relatorio_condominio.taxa_m3_completa AS taxa_m3_completa, relatorio_condominio.taxa_m3 AS taxa_m3,
+        relatorio_condominio.consumo_condominio_m3 AS consumo_condominio_m3
+        FROM relatorio_condominio
+        WHERE relatorio_condominio.id_condominio=? AND relatorio_condominio.mes=? AND relatorio_condominio.ano=?");
         $stmt->bind_param("sss", $mes, $ano, $id_condominio);
         $stmt->execute();
 

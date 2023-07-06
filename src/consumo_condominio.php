@@ -212,10 +212,11 @@ class consumo_condominio {
          if (count($medicao) > 0) {
             $ultima_medicao = count($medicao) - 1;
             //$calculo_consumo = $valor['medicao'] - $medicao[$ultima_medicao];
-            $consumo = "\"v\": {$valor['consumo']}";
+            $valor_sem_virgula = round(str_replace(",", ".", $valor['valor_reais']));
+            $consumo = "\"v\": {$valor_sem_virgula}";
          }
          $mes_ano_reduz = substr($valor['mes_ano'],0,2)."/".substr($valor['mes_ano'],-2);
-         $html .= "{\"c\":[{\"v\": \"{$mes_ano_reduz}\"}, {\"v\": {$valor['medicao']}}, {{$consumo}}]},";
+         $html .= "{\"c\":[{\"v\": \"{$mes_ano_reduz}\"}, {\"v\": {$valor['consumo']}}, {{$consumo}}]},";
          $medicao[] = $valor['medicao'];
       }
       if ($html != "") { $html = substr($html,0,-1); }    
@@ -274,7 +275,7 @@ class consumo_condominio {
          </form>
          <progress id=\"progress-bar\" max=100 value=0></progress>
          <div id=\"gallery\" class=\"img-magnifier-container\">
-            <img id=\"img_imagem_consumo\" src=\"{$this->imagem_consumo}\" alt=\"Foto da leitura do hidrômetro\">
+            <img id=\"img_imagem_consumo\" src=\"{$this->imagem_consumo}\" >
          </div>
          </div>
          </div>

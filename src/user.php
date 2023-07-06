@@ -279,7 +279,7 @@ class user {
             foreach ($lista_checkbox_unidades as $chave => $valor) {
                 $checkbox_unidade_checked = "";
                 $desabilita_edicao = "";
-                if (!($perfil->admin() || $perfil->autorizado_id_condominio($id_condominio))) {
+                if (!($perfil->admin() || $perfil->autorizado_id_condominio($id_condominio)) || $this->id == $user->pega_id()) {
                     $desabilita_edicao = "disabled";
                 }
                 

@@ -111,7 +111,7 @@ function onload_w3c() {
             return;
           }
 
-          if (elemento.id == "fecha_alerta") {
+          if (elemento.id.includes("fecha_alerta_")) {
             elemento.addEventListener("click",
             (event) => { 
               fecha_alerta(elemento);

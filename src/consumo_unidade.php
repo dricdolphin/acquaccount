@@ -175,18 +175,43 @@ class consumo_unidade {
    function pega_html_consumos_unidade($user, $perfil, $id_unidade) {
       global $conecta_db;
 
+      $relatorio = new relatorio();
+      $unidade = new unidade();
+      $unidade->pega_unidade_por_id($id_unidade);
+      $id_condominio = $unidade->pega_id_condominio();
       $html = "";
-      $dados_chart = $this->pega_consumos_unidade($user, $perfil, $id_unidade);
       $consumo = "";
+      $valor = "";
       $medicao = [];
+      
+      $dados_chart = $this->pega_consumos_unidade($user, $perfil, $id_unidade);
       foreach ($dados_chart as $chave => $valor) {
+         $valor_m3 = 0;
+         $valor_reais = 0;
+         $mes = substr($valor['mes_ano'],0,2);
+         $ano = substr($valor['mes_ano'],-4);
          if (count($medicao) > 0) {
             $ultima_medicao = count($medicao) - 1;
-            $calculo_consumo = $valor['medicao'] - $medicao[$ultima_medicao];
-            $consumo = "\"v\": {$calculo_consumo}";
+            if (!isset($valor['valor_m3'])) {
+               $valor_m3 = $valor['medicao'] - $medicao[$ultima_medicao];
+               if ($valor_m3 < 0) { $valor_m3 = 0; }
+               
+               $valor_reais = 0;
+               if ($valor_m3 > 0) {
+                  $dados_relatorio = $relatorio->pega_relatorio_por_id_condominio($user, $perfil, $id_condominio, $mes, $ano);
+                  $valor_reais = str_replace(",",".",$dados_relatorio['taxa_minima']) +  str_replace(",",".",$dados_relatorio['taxa_m3']) * $valor_m3;
+               }
+            } else {
+               $valor_m3 = $valor['valor_m3'];
+               $valor_reais = $valor['valor_reais'];
+            }
+            
+            $valor_sem_virgula =  str_replace(",",".",$valor_reais);
+            $valor_reais = $valor_sem_virgula;
          }
-         $mes_ano_reduz = substr($valor['mes_ano'],0,2)."/".substr($valor['mes_ano'],-2);
-         $html .= "{\"c\":[{\"v\": \"{$mes_ano_reduz}\"}, {\"v\": {$valor['medicao']}}, {{$consumo}}]},";
+
+         $mes_ano_reduz = "{$mes}/".substr($ano,-2);
+         $html .= "{\"c\":[{\"v\": \"{$mes_ano_reduz}\"}, {\"v\": {$valor_m3}}, {\"v\": {$valor_reais}}]},";
          $medicao[] = $valor['medicao'];
       }
       if ($html != "") { $html = substr($html,0,-1); }    
@@ -196,6 +221,13 @@ class consumo_unidade {
 
    function pega_consumos_unidade($user, $perfil, $id_unidade) {
       global $conecta_db;
+      $unidade = new unidade();
+      $unidade->pega_unidade_por_id($id_unidade);
+      $dados = $conecta_db->pega_cache_consumos_unidade($user, $perfil, $id_unidade);
+      
+      if (count($dados) > 0) {
+         return $dados;
+      }
 
       return $conecta_db->pega_consumos_unidade($user, $perfil, $id_unidade);
    }
@@ -331,7 +363,7 @@ class consumo_unidade {
          </form>
          <progress id=\"progress-bar\" max=100 value=0></progress>
          <div id=\"gallery\" class=\"img-magnifier-container\">
-            <img id=\"img_imagem_consumo\" src=\"{$this->imagem_consumo}\" alt=\"Foto da leitura do hidrômetro\">
+            <img id=\"img_imagem_consumo\" src=\"{$this->imagem_consumo}\">
          </div>
          </div>
          </div>

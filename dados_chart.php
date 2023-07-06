@@ -78,8 +78,8 @@ class dados_chart {
         $this->dados['dados_chart'] = "        
         {
             \"cols\": [{\"id\": \"mes_ano\", \"label\": \"Data da Leitura\", \"type\": \"string\"},
-                {\"id\": \"volume\", \"label\": \"Medição (m³)\", \"type\": \"number\"},
-                {\"id\": \"consumo\", \"label\": \"Consumo (m³)\", \"type\": \"number\"}
+                {\"id\": \"volume\", \"label\": \"Consumo (m³)\", \"type\": \"number\"},
+                {\"id\": \"consumo\", \"label\": \"Valor (R$)\", \"type\": \"number\"}
             ],
             \"rows\": [
                 {$rows_html}
@@ -99,14 +99,15 @@ class dados_chart {
             \"backgroundColor\": {\"fill\": \"#FFF\"},
             \"chartArea\":{\"width\":\"85%\", \"height\":\"70%\"},
             \"hAxis\": {\"textStyle\": {\"fontName\": \"Raleway\", \"fontSize\": 10}},
-            \"vAxis\": {\"titleTextStyle\": {\"fontName\": \"Raleway\", \"fontSize\": 10, \"italic\":\"false\"}},
-            \"vAxes\": {\"0\": {\"title\": \"Leitura (m³)\"}, \"1\": {\"title\": \"Consumo (m³)\", \"minValue\": \"0\"}},
+            \"vAxis\": {\"titleTextStyle\": {\"fontName\": \"Raleway\", \"fontSize\": 10, \"italic\":\"false\"}, \"pointSize\": 10, \"format\": \"####.##\"},
+            \"vAxes\": {\"0\": {\"title\": \"Consumo (m³)\"}, \"1\": {\"title\": \"Valor (R$)\", \"minValue\": \"0\", \"pointSize\": 10}},
             \"legend\": {\"position\": \"bottom\", \"maxLines\": 3,
                 \"textStyle\": {\"fontName\": \"Raleway\", \"fontSize\": 10}
             },
             \"colors\": [\"#3f51b5\",\"#ff5722\"],
             \"seriesType\": \"bars\",
             \"series\": {\"0\": {\"targetAxisIndex\": \"0\"}, \"1\": {\"type\": \"line\", \"targetAxisIndex\": \"1\"}},
+            \"pointsVisible\": true,
             \"enableInteractivity\": true
         }";
 
@@ -122,8 +123,8 @@ class dados_chart {
         $this->dados['dados_chart'] = "        
         {
             \"cols\": [{\"id\": \"mes_ano\", \"label\": \"Data da Leitura\", \"type\": \"string\"},
-                {\"id\": \"volume\", \"label\": \"Medição (m³)\", \"type\": \"number\"},
-                {\"id\": \"consumo\", \"label\": \"Consumo (m³)\", \"type\": \"number\"}
+                {\"id\": \"volume\", \"label\": \"Consumo (m³)\", \"type\": \"number\"},
+                {\"id\": \"consumo\", \"label\": \"Valor (R$)\", \"type\": \"number\"}
             ],
             \"rows\": [
                 {$rows_html}
@@ -141,14 +142,15 @@ class dados_chart {
             \"backgroundColor\": {\"fill\": \"#FFF\"},
             \"chartArea\":{\"width\":\"85%\", \"height\":\"70%\"},
             \"hAxis\": {\"textStyle\": {\"fontName\": \"Raleway\", \"fontSize\": 10}},
-            \"vAxis\": {\"titleTextStyle\": {\"fontName\": \"Raleway\", \"fontSize\": 10, \"italic\":\"false\"}},
-            \"vAxes\": {\"0\": {\"title\": \"Leitura (m³)\"}, \"1\": {\"title\": \"Consumo (m³)\", \"minValue\": \"0\"}},
+            \"vAxis\": {\"titleTextStyle\": {\"fontName\": \"Raleway\", \"fontSize\": 10, \"italic\":\"false\"}, \"pointSize\": 10, \"format\": \"####.##\"},
+            \"vAxes\": {\"0\": {\"title\": \"Consumo (m³)\"}, \"1\": {\"title\": \"Valor (R$)\", \"minValue\": \"0\", \"pointSize\": 10}},
             \"legend\": {\"position\": \"bottom\", \"maxLines\": 3,
                 \"textStyle\": {\"fontName\": \"Raleway\", \"fontSize\": 10}
             },
             \"colors\": [\"#3f51b5\",\"#ff5722\"],
             \"seriesType\": \"bars\",
             \"series\": {\"0\": {\"targetAxisIndex\": \"0\"}, \"1\": {\"type\": \"line\", \"targetAxisIndex\": \"1\"}},
+            \"pointsVisible\": true,
             \"enableInteractivity\": true
         }";
 
@@ -176,7 +178,9 @@ if (str_contains($_POST['objeto'], "consumo_condominio_")) {
     $acao = $_POST['objeto'];
 }
 
-if ($perfil->admin() || $perfil->cadastrador() || $perfil->link_autorizado($acao)) {
+if (($perfil->admin() || $perfil->cadastrador() || $perfil->link_autorizado($acao))
+    && !str_contains($_POST['objeto'], "consumo_unidade_")) 
+{
     if ($_POST['objeto'] == "consumo_condominio" || $_POST['objeto'] == "consumo_unidade") {
         $valor_dados_chart = $dados_chart->pega_dados($user, $perfil, $_POST);
         $dados['erro'] = false;
@@ -188,7 +192,7 @@ if ($perfil->admin() || $perfil->cadastrador() || $perfil->link_autorizado($acao
            $dados['erro'] = false;
         }
     }
-} elseif (!($perfil->admin() || $perfil->cadastrador())) {
+} else {
     if (str_contains($_POST['objeto'], "consumo_unidade_")) {
         $id_unidade = substr($_POST['objeto'], 16);
         if (in_array($id_unidade,$user->pega_ids_unidade())) {
@@ -206,6 +210,7 @@ if ($dados['erro'] == false) {
     $dados = [];
     $dados['erro'] = true;
     $dados['mensagem_erro'] = "ACESSO NEGADO!";
+    $dados['POST'] = $_POST;
 }
 
 $json = json_encode($dados);

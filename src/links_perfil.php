@@ -92,7 +92,7 @@ use Iterator;
          $this->nome[] = "Relatórios";
          $this->cor[] = "w3-deep-orange";
          $this->icone[] = "fa fa-file-invoice";
-         $this->link[] = "relatorios";
+         $this->link[] = "relatorio";
          $this->dashboard[] = false;
          $this->publico[] = false;      
          

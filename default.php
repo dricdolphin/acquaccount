@@ -13,8 +13,8 @@ use Exception;
  * 
  * Sistema de Individualização de consumo de água em condomínios
  * 
- * @version 1.0.9
- * @date 2023-06-17
+ * @version 1.1.0
+ * @date 2023-06-22
  * 
  * @author Adriano Di Piero Filho <adrianodipiero@gmail.com>
  */
@@ -124,9 +124,9 @@ if ($user->logado()) {
         $processa_acao = $acquaccount->processa_consumos($user, $perfil, $_GET, $consumo_condominio);
       break;
 
-      case "relatorios":
-        $relatorios = new relatorios();
-        $processa_acao = $acquaccount->processa_relatorios($user, $perfil, $_GET, $relatorios);
+      case "relatorio":
+        $relatorio = new relatorio();
+        $processa_acao = $acquaccount->processa_relatorios($user, $perfil, $_GET, $relatorio);
       break; 
       
       case "contato":

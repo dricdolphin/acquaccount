@@ -214,8 +214,11 @@ class acquaccount {
             $texto_link_voltar .= "&mes_ano={$dados_get['mes_ano']}";
           }
           $texto_link_voltar .= "#{$id_condominio}_{$id_unidade}";
-
           $this->link_voltar = $pagina_default->link_voltar($texto_link_voltar);
+          if (isset($dados_get['dashboard'])) {
+            $this->link_voltar = $pagina_default->link_voltar($texto_link_voltar, "dashboard=user");
+          }
+          
           $this->html_body = $consumo_objeto->exibe_html($user, $perfil, $id_objeto, $mes, $ano);
         } else {
           if ($perfil->admin() || $perfil->cadastrador() || $perfil->link_autorizado($dados_get['acao'])) {
@@ -232,12 +235,12 @@ class acquaccount {
         'link_voltar' => $this->link_voltar);
     }
 
-    function processa_relatorios($user, $perfil, $dados_get, $relatorios) {
+    function processa_relatorios($user, $perfil, $dados_get, $relatorio) {
       $pagina_default = new pagina_default();
       $dashboard = new dashboard();
 
-      $this->titulo_dashboard = $relatorios->classe_plural();
-      $this->icone_dashboard =  $relatorios->pega_icone($padrao = true); 
+      $this->titulo_dashboard = $relatorio->classe_plural();
+      $this->icone_dashboard =  $relatorio->pega_icone($padrao = true); 
       
       if (isset($dados_get['mes_ano'])) {
         $mes = substr($dados_get['mes_ano'],0,2);
@@ -252,12 +255,8 @@ class acquaccount {
         $pagina_default->link_pagina_principal();
       }
       
-      $texto_link_voltar = $dados_get['acao'];
-      if (isset($dados_get['mes_ano'])) {
-        $texto_link_voltar .= "&mes_ano={$dados_get['mes_ano']}";
-      }
-      $this->link_voltar = $pagina_default->link_voltar($texto_link_voltar);
-      $this->html_body = $dashboard->dashboard_relatorio($user, $perfil, $relatorios, $dados_get);
+      $this->link_voltar = $pagina_default->link_voltar();
+      $this->html_body = $dashboard->dashboard_relatorio($user, $perfil, $relatorio, $dados_get);
 
       return array('titulo_dashboard' => $this->titulo_dashboard, 
       'icone_dashboard' => $this->icone_dashboard, 
